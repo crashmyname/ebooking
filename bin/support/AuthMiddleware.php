@@ -6,16 +6,17 @@ class AuthMiddleware
     public function handle() {
         // Pengecekan login
         if (!$this->checkLogin()) {
-            include __DIR__ . '/../../app/Handle/errors/401.php';
-            exit();
+            // include __DIR__ . '/../../app/Handle/errors/401.php';
+            return redirect('/login');
+            // exit();
         }
         
         // Token check, jika Anda ingin juga memvalidasi token di middleware ini
         // Jika Anda hanya membutuhkan login, Anda bisa menghilangkan bagian ini.
-        if (!$this->checkToken()) {
-            include __DIR__ . '/../../app/Handle/errors/401.php';
-            exit();
-        }
+        // if (!$this->checkToken()) {
+        //     include __DIR__ . '/../../app/Handle/errors/401.php';
+        //     exit();
+        // }
     }
 
     public function checkLogin() {

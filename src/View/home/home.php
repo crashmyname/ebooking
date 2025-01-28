@@ -8,8 +8,8 @@
             <div class="col-12 mb-4">
                 <!-- <div class="hero text-white hero-bg-image hero-bg-parallax" style="background-image: url(<?= asset('images/Stanley_Cikupa.jpg')?>);"> -->
                   <div class="hero-inner">
-                    <h2>Welcome Back, <?php echo 'Admin' ?>!</h2>
-                    <p class="lead">This page is a place to manage dashboard and more. <?= $hari?></p>
+                    <h2>Welcome Back, <?php echo \Support\Session::user()->name ?>!</h2>
+                    <p class="lead">This page is a place to manage dashboard and more.</p>
                   </div>
                 <!-- </div> -->
               </div>

@@ -1,10 +1,10 @@
 <section class="section">
     <div class="section-header">
-        <h1>Users</h1>
+        <h1>Status</h1>
     </div>
 
     <div class="section-body">
-        <b>User Management</b>
+        <b>Status Management</b>
     </div>
     <div class="card-body">
         <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-user-tag"></i></button>

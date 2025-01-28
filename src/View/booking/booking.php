@@ -1,36 +1,58 @@
 <section class="section">
     <div class="section-header">
-        <h1>Users</h1>
+        <h1>Booking</h1>
     </div>
 
     <div class="section-body">
-        <b>User Management</b>
+        <b>Booking Management</b>
     </div>
     <div class="card-body">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-user-tag"></i></button>
-        <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdateuser">Update <i class="fas fa-user-edit"></i></button>
-        <button class="btn btn-danger" type="submit" id="deleteuser">Delete <i class="fas fa-user-times"></i></button> <button class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button class="btn btn-success" type="submit" id="exportexcel">Export Excel <i class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i class="far fa-file-pdf"></i></button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i
+                class="fas fa-user-tag"></i></button>
+        <?php if(\Support\Session::user()->role_id == 1): ?>
+        <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatebooking">Update <i
+                class="fas fa-user-edit"></i></button>
+        <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i
+                class="fas fa-user-times"></i></button> <button class="btn btn-outline-success" data-toggle="modal"
+            data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button
+            class="btn btn-success" type="submit" id="exportexcel">Export Excel <i
+                class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i
+                class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i
+                class="far fa-file-pdf"></i></button>
+        <?php endif; ?>
+        <hr>
+        <div class="col-3">
+            <input type="date" name="tanggal" id="tanggal" class="form-control">
+        </div>
     </div>
     <div class="card-body">
         <table id="datatable" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
-                    <th>Level</th>
+                    <th>User</th>
+                    <th>Lapangan</th>
+                    <th>Booking Date</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Session</th>
+                    <th>Status</th>
+                    <th>Ket</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <th>No</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
-                    <th>Level</th>
+                    <th>User</th>
+                    <th>Lapangan</th>
+                    <th>Booking Date</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Session</th>
+                    <th>Status</th>
+                    <th>Ket</th>
                 </tr>
             </tfoot>
         </table>
@@ -38,10 +60,10 @@
 </section>
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
     <div class="modal-dialog" role="document">
-        <form action="" method="POST" id="formadduser" enctype="multipart/form-data">
+        <form action="" method="POST" id="formaddbooking" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal Users</h5>
+                    <h5 class="modal-title">Modal Booking</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -51,35 +73,25 @@
                         <div class="row">
                             <?= csrf() ?>
                             <label>Username</label>
-                            <input type="text" name="username" id="username" class="form-control">
-                            <label>Name</label>
-                            <!-- <input type="text" name="name" id="name" class="form-control"> -->
-                             <select name="name" id="name" class="form-control">
-                                
-                             </select>
-                            <label>Group Tim</label>
-                            <select name="group_tim" id="group_tim" class="form-control" required>
-                                <option value="A">Group A</option>
-                                <option value="B">Group B</option>
-                                <option value="C">Group C</option>
-                                <option value="D">Group D</option>
-                                <option value="E">Group E</option>
-                                <option value="F">Group F</option>
-                                <option value="G">Group G</option>
-                                <option value="H">Group H</option>
-                                <option value="JPN">Group JPN</option>
-                             </select>
-                            <label>Group Section</label>
-                             <input type="text" name="group_section" id="group_section" class="form-control" required>
-                            <label>Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
-                            <label>Role</label>
-                            <select name="role_id" id="role_id" class="form-control">
-                                <?php foreach($role as $level):?>
-                                    <option value="<?= $level->role_id?>"><?= $level->role?></option>
-                                <?php endforeach; ?>
+                            <input type="text" name="users_id" id="users_id"
+                                value="<?= \Support\Session::user()->name ?>" class="form-control" readonly>
+                            <label for="">Booking Date</label>
+                            <input type="date" name="booking_date" id="booking_date" class="form-control">
+                            <label>Lapangan</label>
+                            <select name="lapangan_id" id="lapangan_id" class="form-control">
+                                <!-- <option value="" hidden disabled selected>--Pilih--</option>
+                                <?php foreach($lapangan as $lap): ?>
+                                <option value="<?= $lap->lapangan_id ?>"><?= $lap->jenis ?></option>
+                                <?php endforeach; ?> -->
                             </select>
-                            <!-- <input type="text" name="role_id" id="role_id" class="form-control"> -->
+                            <label>Schedule</label>
+                            <select name="schedule_id" id="schedule_id" class="form-control">
+                                <!-- <?php foreach($schedule as $sch): ?>
+                                    <option value="<?= $sch->schedule_id ?>"><?= $sch->day ?> | <?= $sch->start_time ?> | <?= $sch->end_time ?> | Session <?= $sch->session ?></option>
+                                <?php endforeach; ?> -->
+                            </select>
+                            <label>Description</label>
+                            <textarea name="description" id="description" class="form-control" placeholder="isi nama seksi"></textarea>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -88,7 +100,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="adduser">Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="addbooking">Save changes</button>
                 </div>
             </div>
         </form>
@@ -96,10 +108,10 @@
 </div>
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModalEdit">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="POST" id="formupdateuser" enctype="multipart/form-data">
+        <form action="" method="POST" id="formupdatebooking" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal User</h5>
+                    <h5 class="modal-title">Modal Booking</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -143,49 +155,83 @@
         if ($.fn.dataTable.isDataTable('#datatable')) {
             $('#datatable').DataTable().clear().destroy(); // Hancurkan DataTable yang sudah ada
         }
-        $('#datatable').DataTable({
-            ajax: '<?= base_url() ?>/getusers',
+        var table = $('#datatable').DataTable({
+            ajax: {
+                url: '<?= base_url() ?>/getbooking',
+                type: 'GET',
+                data: function(d) {
+                    // Tambahkan nilai fiscal dari dropdown ke parameter AJAX
+                    d.tanggal = $('#tanggal').val();
+                    console.log(d.tanggal);
+                },
+            },
             processing: true,
             serverSide: true,
             select: true,
             responsive: true,
             columns: [{
-                    data: 'uuid',
-                    name: 'uuid',
+                    data: 'booking_id',
+                    name: 'booking_id',
                     render: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
-                },
-                {
-                    data: 'username',
-                    name: 'username'
                 },
                 {
                     data: 'name',
                     name: 'name'
                 },
                 {
-                    data: 'group_tim',
-                    name: 'group_tim'
+                    data: 'jenis',
+                    name: 'jenis'
                 },
                 {
-                    data: 'group_section',
-                    name: 'group_section'
+                    data: 'booking_date',
+                    name: 'booking_date'
                 },
                 {
-                    data: 'role',
-                    name: 'role'
+                    data: 'day',
+                    name: 'day'
                 },
+                {
+                    data: 'start_time',
+                    name: 'start_time'
+                },
+                {
+                    data: 'end_time',
+                    name: 'end_time'
+                },
+                {
+                    data: 'session',
+                    name: 'session'
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    render:function(data,type,row){
+                        return '<span class="badge badge-success">'+data+'</span>';
+                    }
+                },
+                {
+                    data: 'description',
+                    name: 'description'
+                }
             ]
         });
+        setTimeout(function() {
+            $('#tanggal').trigger('change');
+        }, 100);
+        $('#tanggal').change(function() {
+            table.ajax.reload();
+        }
+    );
     }
 
-    function crudUser() {
+    function crudBooking() {
         var table = $('#datatable').DataTable();
-        $('#adduser').on('click', function(e) {
+        $('#addbooking').on('click', function(e) {
             e.preventDefault();
-            var url = '<?= base_url() . '/users' ?>';
-            var formData = new FormData($('#formadduser')[0]);
+            var url = '<?= base_url() . '/booking' ?>';
+            var formData = new FormData($('#formaddbooking')[0]);
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -195,13 +241,19 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.status == 201) {
-                        $('#formadduser')[0].reset();
+                        $('#formaddbooking')[0].reset();
                         Swal.fire({
                             title: 'Success',
                             icon: 'success',
-                            text: 'User Added',
+                            text: response.message,
                         });
-                        table.ajax.reload();
+                        table.ajax.reload(null, false);
+                    } else if (response.status == 500) {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: response.message,
+                        });
                     } else {
                         var errorMessage = '';
 
@@ -213,7 +265,7 @@
                                     response.status[field].forEach(function(message) {
                                         // Menambahkan pesan error untuk field tertentu
                                         errorMessage += message +
-                                        '\n'; // Gabungkan pesan dengan enter
+                                            '\n'; // Gabungkan pesan dengan enter
                                     });
                                 }
                             }
@@ -226,7 +278,7 @@
                             title: 'Error',
                             icon: 'error',
                             text: errorMessage
-                        .trim(), // Menghapus spasi ekstra sebelum menampilkan
+                                .trim(), // Menghapus spasi ekstra sebelum menampilkan
                         });
                     }
                 }
@@ -388,45 +440,97 @@
         })
     }
 
-    function getEmployee(){
-        $('#username').change(function(){
-            var username = $('#username').val();
+    function getSchedule() {
+        setTimeout(function() {
+            $('#booking_date').trigger('change');
+        }, 100);
+        $('#booking_date').change(function(){
+            var bookingdate = $(this).val();
+            var url = '<?= base_url() . '/getday' ?>';
             $.ajax({
                 type: 'POST',
-                dataType: 'json',
-                url: '<?= base_url()?>/testlo',
-                headers: {
-                    'X-CSRF-Token': '<?= csrfHeader() ?>'
-                },
+                url: url,
                 data: {
-                    nik: username,
+                    booking_date: bookingdate
                 },
-                success:function(data){
-                    // console.log(data);
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '<?= csrfHeader() ?>'
+                },
+                success: function(response) {
                     var options = '';
-                    var optionsdept = '';
-                    var optionssect = '';
-                    var optionsalias = '';
-                    var optionsemail = '';
-                    options += "<option value='" + data.nama + "'>" + data.nama + "</option>";
-                    optionsdept += "<option value='" + data.dept + "'>" + data.dept + "</option>";
-                    optionssect += "<option value='" + data.kode_section + "'>" + data.kode_section + "</option>";
-                    optionsalias += "<option value='" + data.singkatan + "'>" + data.singkatan + "</option>";
-                    optionsemail += "<option value='" + data.work_email + "'>" + data.work_email + "</option>";
-                    $('#name').html(options);
-                    $('#departement').html(optionsdept);
-                    $('#section').html(optionssect);
-                    $('#alias_sect').html(optionsalias);
-                    $('#email').html(optionsemail);
+                    options += '<option value="">-- Pilih --</option>';
+                    response.forEach(function(data) {
+                        options += '<option value="' + data.lapangan_id + '">' + data.jenis + '</option>';
+                    });
+                    $('#lapangan_id').html(options);
+                }
+            })
+        })
+        $('#lapangan_id,#booking_date').change(function() {
+            var lapangan_id = $('#lapangan_id').val();
+            var bookingdate = $('#booking_date').val();
+            var url = '<?= base_url() . '/getscheduledata' ?>';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    lapangan_id: lapangan_id,
+                    booking_date:bookingdate,
+                },
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '<?= csrfHeader() ?>'
+                },
+                success: function(response) {
+                    var options = '';
+                    response.forEach(function(data) {
+                        if(data.is_booked){
+                            options += '<option disabled style="color: grey;" value="' + data.schedule_id + '">' + data.day +
+                            ' | ' + data.start_time + ' | ' + data.end_time +
+                            ' | Session ' + data.session + '</option>';
+                        } else {
+                            options += '<option value="' + data.schedule_id + '">' + data.day +
+                                ' | ' + data.start_time + ' | ' + data.end_time +
+                                ' | Session ' + data.session + '</option>';
+                        }
+                    });
+                    $('#schedule_id').html(options);
                 }
             })
         })
     }
 
+    function getData() {
+        // Pastikan kode hanya berjalan setelah DOM dimuat
+        let tanggalInput = document.getElementById('tanggal');
+        let bookingDate = document.getElementById('booking_date');
+
+        if (tanggalInput && bookingDate) {
+            // Ambil tanggal hari ini dan format ke 'YYYY-MM-DD'
+            let today = new Date();
+            let formattedDate = today.toISOString().split('T')[0];
+
+            // Atur nilai default input tanggal
+            tanggalInput.value = formattedDate;
+            bookingDate.value = formattedDate;
+
+            // Tambahkan event listener untuk memicu fungsi submit saat tanggal dipilih
+            tanggalInput.addEventListener('change', function() {
+                submit(); // Panggil fungsi submit saat tanggal berubah
+            });
+
+            console.log("Tanggal default:", formattedDate);
+        } else {
+            console.error("Elemen dengan ID 'tanggal' atau 'booking_date' tidak ditemukan.");
+        }
+    }
+
     // Panggil initDataTable saat halaman Products dimuat
     $(document).ready(function() {
         initDataTable();
-        crudUser();
-        getEmployee();
+        crudBooking();
+        getSchedule();
+        getData();
     });
 </script>

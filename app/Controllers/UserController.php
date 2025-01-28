@@ -9,6 +9,7 @@ use Support\DataTables;
 use Support\Date;
 use Support\Request;
 use Support\Response;
+use Support\Session;
 use Support\UUID;
 use Support\Validator;
 use Support\View;
@@ -26,6 +27,10 @@ class UserController extends BaseController
     }
     public function index(Request $request)
     {
+        if(Session::user()->role_id != 1){
+            View::error('errors/403');
+            return;
+        }
         $role = Role::all();
         return view('users/user',['title' => 'Users','role'=>$role],'layout/app');
     }

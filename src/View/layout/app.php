@@ -134,7 +134,7 @@
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="<?= asset('stisla-1-2.2.0/dist/assets/img/avatar/avatar-1.png') ?>"
                                 class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, Admin</div>
+                            <div class="d-sm-none d-lg-inline-block">Hi, <?= \Support\Session::user()->name?></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-title">Logged in 5 min ago</div>
@@ -169,6 +169,7 @@
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header">Starter Menu</li>
+                        <?php if(\Support\Session::user()->role_id == 1): ?>
                         <li class=""><a class="nav-link" href="<?= base_url() . '/home' ?>"><i
                                     class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
 
@@ -179,16 +180,16 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url() . '/users' ?>">User</a></li>
-                                <li><a class="nav-link" href="<?= base_url() . '/users' ?>">Schedule</a></li>
-                                <li><a class="nav-link" href="<?= base_url() . '/users' ?>">Lapangan</a></li>
-                                <li><a class="nav-link" href="<?= base_url() . '/users' ?>">Status</a></li>
+                                <li><a class="nav-link" href="<?= base_url() . '/schedule' ?>">Schedule</a></li>
+                                <li><a class="nav-link" href="<?= base_url() . '/lapangan' ?>">Lapangan</a></li>
+                                <li><a class="nav-link" href="<?= base_url() . '/status' ?>">Status</a></li>
                             </ul>
                         </li>
-
+                        <?php endif; ?>
                         <!-- Menu di luar dropdown -->
-                        <li><a class="nav-link" href="<?= base_url().'/planexpenses'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
-                        <li><a class="nav-link" href="<?= base_url().'/forecastexpenses'?>"><i class="fas fa-money-check-alt"></i><span>Booking</span></a></li>
-                        <li><a class="nav-link" href="<?= base_url().'/actualexpenses'?>"><i class="fas fa-file-invoice-dollar"></i><span>Report</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url().'/schedule'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url().'/booking'?>"><i class="fas fa-money-check-alt"></i><span>Booking</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url().'/report'?>"><i class="fas fa-file-invoice-dollar"></i><span>Report</span></a></li>
                     </ul>
 
                 </aside>

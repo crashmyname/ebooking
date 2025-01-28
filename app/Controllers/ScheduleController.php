@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Lapangan;
 use App\Models\Schedule;
 use Support\Date;
 use Support\Response;
@@ -18,27 +19,24 @@ class ScheduleController extends BaseController
     public function getSchedule(Request $request)
     {
         if (Request::isAjax()) {
-            $schedule = Schedule::query()->get();
+            $schedule = Schedule::query()->leftJoin('lapangan','lapangan.lapangan_id','=','schedule.lapangan_id')->get();
             return DataTables::of($schedule)->make(true);
         }
     }
     public function index(Request $request)
     {
-        return view('schedule/schedule',['title' => 'schedule'],'layout/app');
+        $lapangan = Lapangan::all();
+        return view('schedule/schedule',['title' => 'schedule','lapangan'=>$lapangan],'layout/app');
     }
 
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'nama_lapangan' => 'required|min:4|unique:lapangan',
-            'harga' => 'required|min:3',
-        ]);
-        if($validator){
-            return Response::json(['status'=>$validator]);
-        }
         $schedule = Schedule::create([
-            'nama_lapangan' => $request->nama_lapangan,
-            'harga' => $request->harga,
+            'lapangan_id' => $request->lapangan_id,
+            'day' => $request->day,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'session' => $request->session,
             'created_at' => Date::Now(),
             'updated_at' => Date::Now(),
         ]);
@@ -49,16 +47,12 @@ class ScheduleController extends BaseController
 
     public function update(Request $request,$id)
     {
-        $validator = Validator::make($request->all(),[
-            'nama_lapangan' => 'required|min:4|unique:lapangan',
-            'harga' => 'required|min:3',
-        ]);
-        if($validator){
-            return Response::json(['status'=>$validator]);
-        }
-        $schedule = Schedule::query()->where('lapangan_id',$id)->first();
-        $schedule->nama_lapangan = $request->nama_lapangan;
-        $schedule->harga = $request->harga;
+        $schedule = Schedule::query()->where('schedule_id','=',$id)->first();
+        $schedule->lapangan_id = $request->lapangan_id;
+        $schedule->day = $request->day;
+        $schedule->start_time = $request->start_time;
+        $schedule->end_time = $request->end_time;
+        $schedule->session = $request->session;
         $schedule->updated_at = Date::Now();
         $schedule->save();
         if($schedule){
@@ -68,7 +62,7 @@ class ScheduleController extends BaseController
 
     public function delete(Request $request,$id)
     {
-        $schedule = Schedule::query()->where('lapangan_id',$id)->first();
+        $schedule = Schedule::query()->where('schedule_id','=',$id)->first();
         $schedule->delete();
         if($schedule){
             return Response::json(['status'=>200,'message'=>'Lapangan berhasil dihapus']);

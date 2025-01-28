@@ -1,36 +1,32 @@
 <section class="section">
     <div class="section-header">
-        <h1>Users</h1>
+        <h1>Lapangan</h1>
     </div>
 
     <div class="section-body">
-        <b>User Management</b>
+        <b>Lapangan Management</b>
     </div>
     <div class="card-body">
         <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-user-tag"></i></button>
-        <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdateuser">Update <i class="fas fa-user-edit"></i></button>
-        <button class="btn btn-danger" type="submit" id="deleteuser">Delete <i class="fas fa-user-times"></i></button> <button class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button class="btn btn-success" type="submit" id="exportexcel">Export Excel <i class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i class="far fa-file-pdf"></i></button>
+        <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatelapangan">Update <i class="fas fa-user-edit"></i></button>
+        <button class="btn btn-danger" type="submit" id="deletelapangan">Delete <i class="fas fa-user-times"></i></button> <button class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button class="btn btn-success" type="submit" id="exportexcel">Export Excel <i class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i class="far fa-file-pdf"></i></button>
     </div>
     <div class="card-body">
         <table id="datatable" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
-                    <th>Level</th>
+                    <th>Lapangan</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <th>No</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
-                    <th>Level</th>
+                    <th>Lapangan</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
             </tfoot>
         </table>
@@ -38,10 +34,10 @@
 </section>
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
     <div class="modal-dialog" role="document">
-        <form action="" method="POST" id="formadduser" enctype="multipart/form-data">
+        <form action="" method="POST" id="formaddlapangan" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal Users</h5>
+                    <h5 class="modal-title">Modal Lapangan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -50,36 +46,8 @@
                     <div class="card-body">
                         <div class="row">
                             <?= csrf() ?>
-                            <label>Username</label>
-                            <input type="text" name="username" id="username" class="form-control">
-                            <label>Name</label>
-                            <!-- <input type="text" name="name" id="name" class="form-control"> -->
-                             <select name="name" id="name" class="form-control">
-                                
-                             </select>
-                            <label>Group Tim</label>
-                            <select name="group_tim" id="group_tim" class="form-control" required>
-                                <option value="A">Group A</option>
-                                <option value="B">Group B</option>
-                                <option value="C">Group C</option>
-                                <option value="D">Group D</option>
-                                <option value="E">Group E</option>
-                                <option value="F">Group F</option>
-                                <option value="G">Group G</option>
-                                <option value="H">Group H</option>
-                                <option value="JPN">Group JPN</option>
-                             </select>
-                            <label>Group Section</label>
-                             <input type="text" name="group_section" id="group_section" class="form-control" required>
-                            <label>Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
-                            <label>Role</label>
-                            <select name="role_id" id="role_id" class="form-control">
-                                <?php foreach($role as $level):?>
-                                    <option value="<?= $level->role_id?>"><?= $level->role?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <!-- <input type="text" name="role_id" id="role_id" class="form-control"> -->
+                            <label>Lapangan</label>
+                            <input type="text" name="lapangan" id="lapangan" class="form-control">
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -88,7 +56,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="adduser">Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="addlapangan">Save changes</button>
                 </div>
             </div>
         </form>
@@ -96,10 +64,10 @@
 </div>
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModalEdit">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="POST" id="formupdateuser" enctype="multipart/form-data">
+        <form action="" method="POST" id="formupdatelapangan" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal User</h5>
+                    <h5 class="modal-title">Modal Lapangan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -109,20 +77,8 @@
                         <div class="row">
                             <?= csrf() ?>
                             <?= method('PUT') ?>
-                            <label>Username</label>
-                            <input type="text" name="username" id="uusername" class="form-control" readonly>
-                            <label>Name</label>
-                            <input type="text" name="name" id="uname" class="form-control">
-                            <label>Departement</label>
-                            <input type="text" name="departement" id="udepartement" class="form-control">
-                            <label>Email</label>
-                            <input type="email" name="email" id="uemail" class="form-control">
-                            <label>Password</label>
-                            <input type="text" name="password" id="upassword" class="form-control">
-                            <label>Level</label>
-                            <input type="text" name="level" id="ulevel" class="form-control">
-                            <label>Role</label>
-                            <input type="text" name="role_id" id="urole_id" class="form-control">
+                            <label>Lapangan</label>
+                            <input type="text" name="lapangan" id="ulapangan" class="form-control" readonly>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -131,7 +87,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-warning" id="updateuser">Save changes</button>
+                    <button type="submit" class="btn btn-warning" id="updatelapangan">Save changes</button>
                 </div>
             </div>
         </form>
@@ -144,48 +100,40 @@
             $('#datatable').DataTable().clear().destroy(); // Hancurkan DataTable yang sudah ada
         }
         $('#datatable').DataTable({
-            ajax: '<?= base_url() ?>/getusers',
+            ajax: '<?= base_url() ?>/getlapangan',
             processing: true,
             serverSide: true,
             select: true,
             responsive: true,
             columns: [{
-                    data: 'uuid',
-                    name: 'uuid',
+                    data: 'lapangan_id',
+                    name: 'lapangan_id',
                     render: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
                 {
-                    data: 'username',
-                    name: 'username'
+                    data: 'jenis',
+                    name: 'jenis'
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'created_at',
+                    name: 'created_at',
                 },
                 {
-                    data: 'group_tim',
-                    name: 'group_tim'
-                },
-                {
-                    data: 'group_section',
-                    name: 'group_section'
-                },
-                {
-                    data: 'role',
-                    name: 'role'
+                    data: 'updated_at',
+                    name: 'updated_at',
                 },
             ]
         });
     }
 
-    function crudUser() {
+    function crudLapangan() {
         var table = $('#datatable').DataTable();
-        $('#adduser').on('click', function(e) {
+        $('#addlapangan').on('click', function(e) {
             e.preventDefault();
-            var url = '<?= base_url() . '/users' ?>';
-            var formData = new FormData($('#formadduser')[0]);
+            var url = '<?= base_url() . '/lapangan' ?>';
+            var formData = new FormData($('#formaddlapangan')[0]);
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -195,11 +143,11 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.status == 201) {
-                        $('#formadduser')[0].reset();
+                        $('#formaddlapangan')[0].reset();
                         Swal.fire({
                             title: 'Success',
                             icon: 'success',
-                            text: 'User Added',
+                            text: 'Lapangan Added',
                         });
                         table.ajax.reload();
                     } else {
@@ -232,26 +180,14 @@
                 }
             })
         })
-        $('#modalupdateuser').on('click', function(e) {
+        $('#modalupdatelapangan').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
             }).data();
-            var username = $('#uusername');
-            var name = $('#uname');
-            var dept = $('#udepartement');
-            var email = $('#uemail');
-            var password = $('#upassword');
-            var level = $('#ulevel');
-            var role_id = $('#urole_id');
+            var lapangan = $('#ulapangan');
             if (selectedData.length > 0) {
-                username.val(selectedData[0].username);
-                name.val(selectedData[0].name);
-                dept.val(selectedData[0].dept);
-                email.val(selectedData[0].email);
-                password.val(selectedData[0].password);
-                level.val(selectedData[0].level);
-                role_id.val(selectedData[0].role_id);
+                lapangan.val(selectedData[0].lapangan);
                 $('#exampleModalEdit').modal('show');
             } else {
                 $('#exampleModalEdit').modal('hide');
@@ -262,7 +198,7 @@
                 });
             }
         });
-        $('#updateuser').on('click', function(e) {
+        $('#updatelapangan').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
@@ -279,9 +215,9 @@
                 return;
             }
             var row = selectedData[0];
-            var uID = row.uuid;
-            var updateUser = "<?= base_url() . '/uuser/' ?>" + uID;
-            var formID = '#formupdateuser';
+            var uID = row.lapangan_id;
+            var updateLapangan = "<?= base_url() . '/ulapangan/' ?>" + uID;
+            var formID = '#formupdatelapangan';
             $('#modalwarning').modal('hide');
             if (selectedData.length > 0) {
                 Swal.fire({
@@ -292,11 +228,11 @@
                     confirmButtonText: 'Ya, Ubah!!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var formUpUser = new FormData($(formID)[0]);
+                        var formUpLapangan = new FormData($(formID)[0]);
                         $.ajax({
                             type: 'POST',
-                            url: updateUser,
-                            data: formUpUser,
+                            url: updateLapangan,
+                            data: formUpLapangan,
                             contentType: false,
                             processData: false,
                             dataType: 'json',
@@ -311,7 +247,7 @@
                                         timerProgressBar: true,
                                     })
                                     table.ajax.reload(null, false);
-                                    $('#formupdateuser')[0].reset();
+                                    $('#formupdatelapangan')[0].reset();
                                 } else {
                                     Swal.fire({
                                         title: 'error',
@@ -328,7 +264,7 @@
                 })
             }
         })
-        $('#deleteuser').on('click', function(e) {
+        $('#deletelapangan').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
@@ -356,10 +292,10 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         selectedData.each(function(data) {
-                            const uuid = data.uuid;
+                            const uuid = data.lapangan_id;
                             $.ajax({
                                 type: 'DELETE',
-                                url: "<?= base_url() . '/user/' ?>" + uuid,
+                                url: "<?= base_url() . '/lapangan/' ?>" + uuid,
                                 success: function(response) {
                                     if (response.status == 200) {
                                         Swal.fire({
@@ -388,45 +324,9 @@
         })
     }
 
-    function getEmployee(){
-        $('#username').change(function(){
-            var username = $('#username').val();
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: '<?= base_url()?>/testlo',
-                headers: {
-                    'X-CSRF-Token': '<?= csrfHeader() ?>'
-                },
-                data: {
-                    nik: username,
-                },
-                success:function(data){
-                    // console.log(data);
-                    var options = '';
-                    var optionsdept = '';
-                    var optionssect = '';
-                    var optionsalias = '';
-                    var optionsemail = '';
-                    options += "<option value='" + data.nama + "'>" + data.nama + "</option>";
-                    optionsdept += "<option value='" + data.dept + "'>" + data.dept + "</option>";
-                    optionssect += "<option value='" + data.kode_section + "'>" + data.kode_section + "</option>";
-                    optionsalias += "<option value='" + data.singkatan + "'>" + data.singkatan + "</option>";
-                    optionsemail += "<option value='" + data.work_email + "'>" + data.work_email + "</option>";
-                    $('#name').html(options);
-                    $('#departement').html(optionsdept);
-                    $('#section').html(optionssect);
-                    $('#alias_sect').html(optionsalias);
-                    $('#email').html(optionsemail);
-                }
-            })
-        })
-    }
-
     // Panggil initDataTable saat halaman Products dimuat
     $(document).ready(function() {
         initDataTable();
-        crudUser();
-        getEmployee();
+        crudLapangan();
     });
 </script>

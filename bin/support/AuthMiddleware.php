@@ -8,6 +8,7 @@ class AuthMiddleware
         if (!$this->checkLogin()) {
             // include __DIR__ . '/../../app/Handle/errors/401.php';
             return redirect('/login');
+            // View::redirectTo('/');
             // exit();
         }
         
@@ -21,6 +22,8 @@ class AuthMiddleware
 
     public function checkLogin() {
         if (!\Support\Session::has('user')) {
+            http_response_code(401);
+            View::error('errors/401');
             return false;
         }
 
@@ -30,6 +33,7 @@ class AuthMiddleware
         if (isset($_SESSION['login_time']) && ($current_time - $_SESSION['login_time']) > $session_lifetime) {
             session_unset();
             session_destroy();
+            http_response_code(401); // Unauthorized
             return false;
         }
         

@@ -91,25 +91,30 @@ class BookingController extends BaseController
         if($cekbooking){
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
-        DB::beginTransaction();
-        try{
-            $booking = Booking::create([
-                'users_id' => Session::user()->users_id,
-                'lapangan_id' => $request->lapangan_id,
-                'booking_date' => $request->booking_date,
-                'schedule_id' => $request->schedule_id,
-                'description' => $request->description,
-                'status_id' => 2,
-                'created_at' => Date::Now(),
-                'updated_at' => Date::Now(),
-            ]);
-            DB::commit();
-            if($booking){
-                return Response::json(['status'=>201,'message'=>'Booking berhasil']);
+        $bookingdate = $request->booking_date;
+        if(Date::isValidDateRange($bookingdate,14,14)){
+            DB::beginTransaction();
+            try{
+                $booking = Booking::create([
+                    'users_id' => Session::user()->users_id,
+                    'lapangan_id' => $request->lapangan_id,
+                    'booking_date' => $request->booking_date,
+                    'schedule_id' => $request->schedule_id,
+                    'description' => $request->description,
+                    'status_id' => 2,
+                    'created_at' => Date::Now(),
+                    'updated_at' => Date::Now(),
+                ]);
+                DB::commit();
+                if($booking){
+                    return Response::json(['status'=>201,'message'=>'Booking berhasil']);
+                }
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return Response::json(['status'=>500,'message'=>$e->getMessage()]);
             }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return Response::json(['status'=>500,'message'=>$e->getMessage()]);
+        } else {
+            return Response::json(['status'=>400,'message'=>'Tanggal yang dipilih tidak boleh lebih dari 14 hari']);
         }
     }
 

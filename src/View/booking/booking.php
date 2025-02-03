@@ -248,6 +248,12 @@
                             text: response.message,
                         });
                         table.ajax.reload(null, false);
+                    } else if(response.status == 400){
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: response.message,
+                        });
                     } else if (response.status == 500) {
                         Swal.fire({
                             title: 'Error',
@@ -501,6 +507,21 @@
         })
     }
 
+    function DateRange(){
+        let today = new Date();
+        let minDate = new Date();
+        minDate.setDate(today.getDate() - 14);
+        let maxDate = new Date();
+        maxDate.setDate(today.getDate() + 14);
+
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        document.getElementById("booking_date").min = formatDate(minDate);
+        document.getElementById("booking_date").max = formatDate(maxDate);
+    }
+
     function getData() {
         // Pastikan kode hanya berjalan setelah DOM dimuat
         let tanggalInput = document.getElementById('tanggal');
@@ -532,5 +553,6 @@
         crudBooking();
         getSchedule();
         getData();
+        DateRange();
     });
 </script>

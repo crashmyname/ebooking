@@ -142,12 +142,6 @@
                                 class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profile
                             </a>
-                            <a href="features-activities.html" class="dropdown-item has-icon">
-                                <i class="fas fa-bolt"></i> Activities
-                            </a>
-                            <a href="features-settings.html" class="dropdown-item has-icon">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
                             <div class="dropdown-divider"></div>
                             <a href="" id="logout" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -272,7 +266,7 @@
                             window.location.href = '<?=base_url()?>/login';
                         } else {
                             // Tampilkan pesan error jika bukan 401
-                            $('.main-content').html('<p>Error loading content</p>');
+                            $('.main-content').html('<br><br><h2>Coming soon</h2>');
                         }
                     },
                     complete: function () {

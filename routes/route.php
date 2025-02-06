@@ -23,9 +23,9 @@ Route::group([AuthMiddleware::class],function(){
     Route::post('/getscheduledata',[BookingController::class,'getScheduleData']);
     Route::post('/getday',[BookingController::class,'getDay']);
     Route::post('/logout',[AuthController::class,'logout']);
-    Route::get('/home',[HomeController::class,'dashboard']);
     Route::get('/profile',[HomeController::class,'profile']);
     Route::get('/settings',[HomeController::class,'settings']);
+    Route::get('/home',[HomeController::class,'dashboard']);
     // Users
     Route::get('/getusers',[UserController::class,'getUser']);
     Route::get('/users',[UserController::class,'index']);

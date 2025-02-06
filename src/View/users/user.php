@@ -18,8 +18,8 @@
                     <th>No</th>
                     <th>Username</th>
                     <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
+                    <th>Section</th>
+                    <th>Alias Section</th>
                     <th>Level</th>
                 </tr>
             </thead>
@@ -28,8 +28,8 @@
                     <th>No</th>
                     <th>Username</th>
                     <th>Name</th>
-                    <th>Group Tim</th>
-                    <th>Group Section</th>
+                    <th>Section</th>
+                    <th>Alias Section</th>
                     <th>Level</th>
                 </tr>
             </tfoot>
@@ -57,20 +57,14 @@
                              <select name="name" id="name" class="form-control">
                                 
                              </select>
-                            <label>Group Tim</label>
-                            <select name="group_tim" id="group_tim" class="form-control" required>
-                                <option value="A">Group A</option>
-                                <option value="B">Group B</option>
-                                <option value="C">Group C</option>
-                                <option value="D">Group D</option>
-                                <option value="E">Group E</option>
-                                <option value="F">Group F</option>
-                                <option value="G">Group G</option>
-                                <option value="H">Group H</option>
-                                <option value="JPN">Group JPN</option>
-                             </select>
-                            <label>Group Section</label>
-                             <input type="text" name="group_section" id="group_section" class="form-control" required>
+                            <label>Section</label>
+                            <select name="section" id="section" class="form-control">
+                            
+                            </select>
+                            <label>Singkatan Section</label>
+                            <select name="alias_section" id="alias_section" class="form-control">
+                            
+                            </select>
                             <label>Password</label>
                             <input type="password" name="password" id="password" class="form-control" required>
                             <label>Role</label>
@@ -165,12 +159,12 @@
                     name: 'name'
                 },
                 {
-                    data: 'group_tim',
-                    name: 'group_tim'
+                    data: 'section',
+                    name: 'section'
                 },
                 {
-                    data: 'group_section',
-                    name: 'group_section'
+                    data: 'singkatan',
+                    name: 'singkatan'
                 },
                 {
                     data: 'role',
@@ -416,7 +410,7 @@
                     $('#name').html(options);
                     $('#departement').html(optionsdept);
                     $('#section').html(optionssect);
-                    $('#alias_sect').html(optionsalias);
+                    $('#alias_section').html(optionsalias);
                     $('#email').html(optionsemail);
                 }
             })

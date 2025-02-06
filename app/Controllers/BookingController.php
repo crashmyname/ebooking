@@ -91,6 +91,16 @@ class BookingController extends BaseController
         if($cekbooking){
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
+        // Validasi jika pengguna sudah booking pada lapangan yang sama, tapi di sesi berbeda
+        $cekUserBooking = Booking::query()
+        ->where('lapangan_id', '=', $request->lapangan_id)
+        ->where('booking_date', '=', $request->booking_date)
+        ->where('users_id', '=', Session::user()->users_id)
+        ->first();
+
+        if ($cekUserBooking) {
+            return Response::json(['status' => 500, 'message' => 'Anda sudah melakukan booking lapangan yang sama di sesi lain']);
+        }
         $bookingdate = $request->booking_date;
         if(Date::isValidDateRange($bookingdate,14,14)){
             DB::beginTransaction();

@@ -90,8 +90,8 @@
                                     <option value="<?= $sch->schedule_id ?>"><?= $sch->day ?> | <?= $sch->start_time ?> | <?= $sch->end_time ?> | Session <?= $sch->session ?></option>
                                 <?php endforeach; ?> -->
                             </select>
-                            <label>Description</label>
-                            <textarea name="description" id="description" class="form-control" placeholder="isi nama seksi"></textarea>
+                            <label>Section</label>
+                            <input type="text" name="description" id="description" class="form-control" value="<?= \Support\Session::user()->section?>" readonly>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -240,27 +240,31 @@
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
-                    if (response.status == 201) {
-                        $('#formaddbooking')[0].reset();
-                        Swal.fire({
-                            title: 'Success',
-                            icon: 'success',
-                            text: response.message,
-                        });
-                        table.ajax.reload(null, false);
-                    } else if(response.status == 400){
-                        Swal.fire({
-                            title: 'Error',
-                            icon: 'error',
-                            text: response.message,
-                        });
-                    } else if (response.status == 500) {
-                        Swal.fire({
-                            title: 'Error',
-                            icon: 'error',
-                            text: response.message,
-                        });
-                    } else {
+                    switch(true){
+                        case response.status === 201:
+                            $('#formaddbooking')[0].reset();
+                            Swal.fire({
+                                title: 'Success',
+                                icon: 'success',
+                                text: response.message,
+                            });
+                            table.ajax.reload(null, false);
+                            break;
+                        case response.status === 400:
+                            Swal.fire({
+                                title: 'Info',
+                                icon: 'info',
+                                text: response.message,
+                            });
+                            break;
+                        case response.status === 500:
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: response.message,
+                            });
+                            break;
+                        default:
                         var errorMessage = '';
 
                         // Memastikan bahwa response.status adalah objek dan memiliki pesan error

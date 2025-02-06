@@ -443,7 +443,7 @@ class BaseController {
 
     public function view($view, $data = [], $layout = null)
     {
-        setSecurityHeaders();
+        // setSecurityHeaders();
         try{
             extract($data);
             $viewPath = __DIR__ . '/../../src/View/' . $view . '.php';

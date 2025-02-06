@@ -85,4 +85,42 @@ class UserController extends BaseController
         $user->delete();
         return Response::json(['status'=>200,'message'=>'User berhasil dihapus']);
     }
+
+    public function profile(Request $request, $id)
+    {
+        $user = User::query()->where('uuid','=',$id)->first();
+        return view('users/profil',['user'=>$user],'layout/app');
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::query()->where('uuid','=',$id)->first();
+        if($user->username == Session::user()->username){
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->dept = $request->dept;
+            $user->section = $request->section;
+            if($request->password){
+                $user->password = password_hash($request->password,PASSWORD_BCRYPT);
+            }
+            if($request->getClientOriginalName('foto')){
+                $path = storage_path('profile-users');
+                if(!file_exists($path)){
+                    mkdir($path,0777,true);
+                }
+                $oldFile = $path.'/'.$user->profile;
+                if(file_exists($oldFile)){
+                    unlink($oldFile);
+                }
+                $user->profile = $request->getClientOriginalName('foto');
+                $tempPath = $request->getPath('foto');
+                $destination = $path.'/'.$user->profile;
+                move_uploaded_file($tempPath,$destination);
+            }
+            $user->save();
+            Session::flash('success', 'Profile berhasil diperbarui!');
+            return redirect('/home');
+        }
+        Response::json(['status'=>403,'message'=>'Forbiden Access for update profile isnt you']);
+    }
 }

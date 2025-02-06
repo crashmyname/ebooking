@@ -7,6 +7,8 @@ use App\Controllers\LapanganController;
 use App\Controllers\ScheduleController;
 use App\Controllers\StatusController;
 use App\Controllers\UserController;
+use App\Models\Booking;
+use Support\Response;
 use Support\Route;
 use Support\View;
 use Support\AuthMiddleware; //<-- Penambahan Middleware atau session login
@@ -17,6 +19,10 @@ Route::get('/login', function(){
     return view('auth/login');
 });
 Route::post('/login',[AuthController::class,'onLogin']);
+Route::get('/testbooking',function(){
+    $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->get();
+    return Response::json(['status'=>200,'data'=>$booking]);
+});
 Route::group([AuthMiddleware::class],function(){
     // Options
     Route::post('/testlo',[ApiController::class,'DataApiNama']);
@@ -32,6 +38,7 @@ Route::group([AuthMiddleware::class],function(){
     Route::post('/users',[UserController::class,'create']);
     Route::put('/users/{id}',[UserController::class,'update']);
     Route::delete('/users/{id}',[UserController::class,'delete']);
+    Route::get('/user/profile/{id}',[UserController::class, 'profile']);
     // Lapangan
     Route::get('/getlapangan',[LapanganController::class,'getLapangan']);
     Route::get('/lapangan',[LapanganController::class,'index']);
@@ -50,6 +57,9 @@ Route::group([AuthMiddleware::class],function(){
     Route::post('/booking',[BookingController::class,'create']);
     Route::put('/booking/{id}',[BookingController::class,'update']);
     Route::delete('/booking/{id}',[BookingController::class,'delete']);
+    Route::get('/report', function(){
+        return view('report/report',[],'layout/app');
+    });
     // Status
     Route::get('/getstatus',[StatusController::class, 'getStatus']);
     Route::get('/status',[StatusController::class, 'index']);

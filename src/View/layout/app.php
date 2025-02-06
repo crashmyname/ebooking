@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap5.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.0.1/dist/fullcalendar.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.0.1/dist/fullcalendar.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
@@ -138,7 +140,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-title">Logged in 5 min ago</div>
-                            <a href="<?= base_url() . '/user/profile/' ?>"
+                            <a href="<?= base_url() . '/user/profile/'. \Support\Session::user()->uuid ?>"
                                 class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profile
                             </a>
@@ -312,6 +314,9 @@
                 }
             };
         });
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let bookings = {};
         document.getElementById('logout').addEventListener('click', function(e) {
             e.preventDefault();
             Swal.fire({

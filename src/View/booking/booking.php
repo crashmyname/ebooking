@@ -7,8 +7,7 @@
         <b>Booking Management</b>
     </div>
     <div class="card-body">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i
-                class="fas fa-user-tag"></i></button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-futbol"></i></button>
         <?php if(\Support\Session::user()->role_id == 1): ?>
         <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatebooking">Update <i
                 class="fas fa-user-edit"></i></button>
@@ -91,7 +90,7 @@
                                 <?php endforeach; ?> -->
                             </select>
                             <label>Section</label>
-                            <input type="text" name="description" id="description" class="form-control" value="<?= \Support\Session::user()->section?>" readonly>
+                            <input type="text" name="description" id="description" class="form-control" value="<?= \Support\Session::user()->singkatan?>" readonly>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -232,6 +231,14 @@
             e.preventDefault();
             var url = '<?= base_url() . '/booking' ?>';
             var formData = new FormData($('#formaddbooking')[0]);
+            if($('#schedule_id,#lapangan_id').val() == "" || $('#schedule_id').val() == null){
+                Swal.fire({
+                    title: 'Error',
+                    icon: 'error',
+                    text: 'schedule dan lapangan wajib diisi',
+                });
+                return;
+            }
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -516,7 +523,7 @@
         let minDate = new Date();
         minDate.setDate(today.getDate() - 14);
         let maxDate = new Date();
-        maxDate.setDate(today.getDate() + 14);
+        maxDate.setDate(today.getDate() + 30);
 
         function formatDate(date) {
             return date.toISOString().split('T')[0];

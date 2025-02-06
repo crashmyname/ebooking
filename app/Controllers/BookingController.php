@@ -12,6 +12,7 @@ use Support\DB;
 use Support\Request;
 use Support\Response;
 use Support\Session;
+use Support\UUID;
 use Support\Validator;
 use Support\View;
 use Support\CSRFToken;
@@ -102,10 +103,11 @@ class BookingController extends BaseController
             return Response::json(['status' => 500, 'message' => 'Anda sudah melakukan booking lapangan yang sama di sesi lain']);
         }
         $bookingdate = $request->booking_date;
-        if(Date::isValidDateRange($bookingdate,14,14)){
+        if(Date::isValidDateRange($bookingdate,14,30)){
             DB::beginTransaction();
             try{
                 $booking = Booking::create([
+                    'uuid' => UUID::generateUuid(),
                     'users_id' => Session::user()->users_id,
                     'lapangan_id' => $request->lapangan_id,
                     'booking_date' => $request->booking_date,

@@ -165,10 +165,10 @@
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header">Starter Menu</li>
-                        <?php if(\Support\Session::user()->role_id == 1): ?>
                         <li class=""><a class="nav-link" href="<?= base_url() . '/home' ?>"><i
-                                    class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-
+                        class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                        
+                        <?php if(\Support\Session::user()->role_id == 1): ?>
                         <!-- Dropdown Master Data -->
                         <li class="dropdown">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">

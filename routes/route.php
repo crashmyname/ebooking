@@ -36,7 +36,7 @@ Route::group([AuthMiddleware::class],function(){
     Route::get('/getusers',[UserController::class,'getUser']);
     Route::get('/users',[UserController::class,'index']);
     Route::post('/users',[UserController::class,'create']);
-    Route::put('/users/{id}',[UserController::class,'update']);
+    Route::put('/uusers/{id}',[UserController::class,'update']);
     Route::delete('/users/{id}',[UserController::class,'delete']);
     Route::get('/user/profile/{id}',[UserController::class, 'profile']);
     Route::post('/user/profile/{id}',[UserController::class, 'updateProfile']);

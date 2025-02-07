@@ -63,7 +63,8 @@ class UserController extends BaseController
 
     public function update(Request $request,$id)
     {
-        $user = User::query()->where('uuid',$id)->first();
+        $user = User::query()->where('uuid','=',$id)->first();
+        $role = $request->role_id == 'User' ? 2 : 1;
         if(!$user){
             return Response::json(['status'=>404,'message'=>'User tidak ditemukan']);
         }
@@ -71,17 +72,17 @@ class UserController extends BaseController
         if($request->password){
             $user->password = password_hash($request->password,PASSWORD_BCRYPT);
         }
-        $user->group_tim = $request->group_tim;
-        $user->group_section = $request->group_section;
-        $user->role_id = $request->role_id;
+        $user->section = $request->section;
+        $user->singkatan = $request->alias_sect;
+        $user->role_id = $role;
         $user->updated_at = Date::Now();
         $user->save();
-        return Response::json(['status'=>201,'message'=>'User berhasil diupdate']);
+        return Response::json(['status'=>200,'message'=>'User berhasil diupdate']);
     }
 
     public function delete(Request $request,$id)
     {
-        $user = User::query()->where('uuid',$id)->first();
+        $user = User::query()->where('uuid','=',$id)->first();
         $user->delete();
         return Response::json(['status'=>200,'message'=>'User berhasil dihapus']);
     }

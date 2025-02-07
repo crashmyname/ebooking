@@ -107,16 +107,14 @@
                             <input type="text" name="username" id="uusername" class="form-control" readonly>
                             <label>Name</label>
                             <input type="text" name="name" id="uname" class="form-control">
-                            <label>Departement</label>
-                            <input type="text" name="departement" id="udepartement" class="form-control">
-                            <label>Email</label>
-                            <input type="email" name="email" id="uemail" class="form-control">
+                            <label>Section</label>
+                            <input type="text" name="section" id="usection" class="form-control">
+                            <label>Alias Section</label>
+                            <input type="text" name="alias_sect" id="ualias_sect" class="form-control">
                             <label>Password</label>
-                            <input type="text" name="password" id="upassword" class="form-control">
-                            <label>Level</label>
-                            <input type="text" name="level" id="ulevel" class="form-control">
+                            <input type="password" name="password" id="upassword" class="form-control">
                             <label>Role</label>
-                            <input type="text" name="role_id" id="urole_id" class="form-control">
+                            <input type="text" name="role_id" id="urole_id" class="form-control" readonly>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -233,19 +231,17 @@
             }).data();
             var username = $('#uusername');
             var name = $('#uname');
-            var dept = $('#udepartement');
-            var email = $('#uemail');
+            var sect = $('#usection');
+            var alias = $('#ualias_sect');
             var password = $('#upassword');
-            var level = $('#ulevel');
             var role_id = $('#urole_id');
             if (selectedData.length > 0) {
                 username.val(selectedData[0].username);
                 name.val(selectedData[0].name);
-                dept.val(selectedData[0].dept);
-                email.val(selectedData[0].email);
-                password.val(selectedData[0].password);
-                level.val(selectedData[0].level);
-                role_id.val(selectedData[0].role_id);
+                sect.val(selectedData[0].section);
+                alias.val(selectedData[0].singkatan);
+                // password.val(selectedData[0].password);
+                role_id.val(selectedData[0].role_id == 1 ? 'Administrator' : 'User');
                 $('#exampleModalEdit').modal('show');
             } else {
                 $('#exampleModalEdit').modal('hide');
@@ -274,7 +270,7 @@
             }
             var row = selectedData[0];
             var uID = row.uuid;
-            var updateUser = "<?= base_url() . '/uuser/' ?>" + uID;
+            var updateUser = "<?= base_url() . '/uusers/' ?>" + uID;
             var formID = '#formupdateuser';
             $('#modalwarning').modal('hide');
             if (selectedData.length > 0) {
@@ -299,7 +295,7 @@
                                     Swal.fire({
                                         title: 'success',
                                         icon: 'success',
-                                        text: 'Data berhasil diupdate',
+                                        text: response.message,
                                         showConfirmButton: false,
                                         timer: 1500,
                                         timerProgressBar: true,
@@ -353,16 +349,17 @@
                             const uuid = data.uuid;
                             $.ajax({
                                 type: 'DELETE',
-                                url: "<?= base_url() . '/user/' ?>" + uuid,
+                                url: "<?= base_url() . '/users/' ?>" + uuid,
                                 success: function(response) {
                                     if (response.status == 200) {
                                         Swal.fire({
                                             title: 'Success',
                                             icon: 'success',
-                                            text: 'Data Berhasil dihapus',
+                                            text: response.message,
                                             timer: 1500,
                                             timerProgressBar: true,
                                         });
+                                        table.ajax.reload(null, false);
                                     } else {
                                         Swal.fire({
                                             title: 'Error',

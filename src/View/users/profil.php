@@ -29,26 +29,18 @@
                         <?php endif; ?>
                         <div class="profile-widget-items">
                             <div class="profile-widget-item">
-                                <div class="profile-widget-item-label">Posts</div>
-                                <div class="profile-widget-item-value">187</div>
-                            </div>
-                            <div class="profile-widget-item">
-                                <div class="profile-widget-item-label">Followers</div>
-                                <div class="profile-widget-item-value">6,8K</div>
-                            </div>
-                            <div class="profile-widget-item">
-                                <div class="profile-widget-item-label">Following</div>
-                                <div class="profile-widget-item-value">2,1K</div>
+                                <div class="profile-widget-item-label"><?= \Support\Session::user()->section?></div>
+                                <div class="profile-widget-item-value"><?= \Support\Session::user()->singkatan?></div>
                             </div>
                         </div>
                     </div>
                     <div class="profile-widget-description">
                         <div class="profile-widget-name"><?= $users->name?> <div
                                 class="text-muted d-inline font-weight-normal">
-                                <div class="slash"></div> <?= $users->level?>
+                                <div class="slash"></div> <?= $users->role_id == 1 ? 'Administrator' : 'User'?>
                             </div>
                         </div>
-                        <?= $users->name?> is a <?= $users->level?> in <b>Indonesia Stanley Electric</b>.
+                        <?= $users->name?> is a <?= $users->role_id == 1 ? 'Administrator' : 'User'?> in <b>Indonesia Stanley Electric</b>.
                     </div>
                     <div class="card-footer text-center">
                         <div class="font-weight-bold mb-2">Follow <?= $users->name?> On</div>
@@ -93,19 +85,15 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6 col-12">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" value="<?= $users->email?>" name="email">
+                                    <label>Section</label>
+                                    <input type="text" class="form-control" value="<?= $users->section?>" name="section">
                                     <div class="invalid-feedback">
                                         Please fill in the email
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 col-12">
-                                    <label>Dept</label>
-                                    <input type="text" class="form-control" value="<?= $users->dept?>" name="dept">
-                                </div>
-                                <div class="form-group col-md-6 col-12">
-                                    <label>Section</label>
-                                    <input type="text" class="form-control" value="<?= $users->section?>" name="section">
+                                    <label>Alias Section</label>
+                                    <input type="text" class="form-control" value="<?= $users->singkatan?>" name="alias_sect">
                                 </div>
                             </div>
                             <div class="row">
@@ -115,10 +103,6 @@
                                     <div class="invalid-feedback">
                                         Please fill in the password
                                     </div>
-                                </div>
-                                <div class="form-group col-md-6 col-12">
-                                    <label>Profile</label>
-                                    <input type="file" class="form-control" name="foto">
                                 </div>
                             </div>
                         </div>

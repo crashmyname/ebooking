@@ -25,6 +25,7 @@ class BookingController extends BaseController
         if (Request::isAjax()) {
             if($request->tanggal){
                 $booking = Booking::query()
+                ->select('booking_id','booking.uuid','lapangan.jenis','users.name','booking_date','schedule.start_time','schedule.end_time','schedule.session','status.status','booking.description','schedule.day','users.users_id')
                 ->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
                 ->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')
                 ->leftJoin('users','users.users_id','=','booking.users_id')
@@ -142,9 +143,15 @@ class BookingController extends BaseController
         }
     }
 
-    public function delete(Request $request,$id)
+    public function delete(Request $request,$id,$uid)
     {
-        $booking = Booking::query()->where('lapangan_id',$id)->first();
+        // $booking = Booking::query()->where('uuid','=',$id)->where('users_id','=',$uid)->first();
+        $booking = Booking::query()->where('uuid','=',$id)->first();
+        if(Session::user()->role_id != 1){
+            if($booking->users_id != Session::user()->users_id){
+                return Response::json(['status'=>400,'message'=>'Hanya bisa menghapus booking milik sendiri']);
+            }
+        }
         $booking->delete();
         if($booking){
             return Response::json(['status'=>200,'message'=>'Lapangan berhasil dihapus']);

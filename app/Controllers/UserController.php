@@ -97,25 +97,10 @@ class UserController extends BaseController
         $user = User::query()->where('uuid','=',$id)->first();
         if($user->username == Session::user()->username){
             $user->name = $request->name;
-            $user->email = $request->email;
-            $user->dept = $request->dept;
             $user->section = $request->section;
+            $user->singkatan = $request->alias_sect;
             if($request->password){
                 $user->password = password_hash($request->password,PASSWORD_BCRYPT);
-            }
-            if($request->getClientOriginalName('foto')){
-                $path = storage_path('profile-users');
-                if(!file_exists($path)){
-                    mkdir($path,0777,true);
-                }
-                $oldFile = $path.'/'.$user->profile;
-                if(file_exists($oldFile)){
-                    unlink($oldFile);
-                }
-                $user->profile = $request->getClientOriginalName('foto');
-                $tempPath = $request->getPath('foto');
-                $destination = $path.'/'.$user->profile;
-                move_uploaded_file($tempPath,$destination);
             }
             $user->save();
             Session::flash('success', 'Profile berhasil diperbarui!');

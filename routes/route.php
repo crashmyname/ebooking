@@ -39,6 +39,7 @@ Route::group([AuthMiddleware::class],function(){
     Route::put('/users/{id}',[UserController::class,'update']);
     Route::delete('/users/{id}',[UserController::class,'delete']);
     Route::get('/user/profile/{id}',[UserController::class, 'profile']);
+    Route::post('/user/profile/{id}',[UserController::class, 'updateProfile']);
     // Lapangan
     Route::get('/getlapangan',[LapanganController::class,'getLapangan']);
     Route::get('/lapangan',[LapanganController::class,'index']);
@@ -51,12 +52,13 @@ Route::group([AuthMiddleware::class],function(){
     Route::post('/schedule',[ScheduleController::class,'create']);
     Route::put('/schedule/{id}',[ScheduleController::class,'update']);
     Route::delete('/schedule/{id}',[ScheduleController::class,'delete']);
+    Route::get('/mapschedule',[ScheduleController::class, 'getScheduleUser']);
     // Booking
     Route::get('/getbooking',[BookingController::class,'getBooking']);
     Route::get('/booking',[BookingController::class,'index']);
     Route::post('/booking',[BookingController::class,'create']);
     Route::put('/booking/{id}',[BookingController::class,'update']);
-    Route::delete('/booking/{id}',[BookingController::class,'delete']);
+    Route::delete('/booking/{id}/{uid}',[BookingController::class,'delete']);
     Route::get('/report', function(){
         return view('report/report',[],'layout/app');
     });

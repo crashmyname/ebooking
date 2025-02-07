@@ -2,7 +2,18 @@
     <div class="section-header">
         <h1>Dashboard</h1>
     </div>
-
+    <?php if (\Support\Session::hasFlash('success')): ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: "<?= \Support\Session::flash('success') ?>",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                </script>
+            <?php endif; ?>
     <div class="section-body">
         <div class="row">
             <div class="col-12 mb-4">

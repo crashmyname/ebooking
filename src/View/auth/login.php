@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Login &mdash; Stisla</title>
+  <title>Login &mdash; EBooking System</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="<?= asset('stisla-1-2.2.0/dist/assets/modules/bootstrap/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= asset('stisla-1-2.2.0/dist/assets/modules/fontawesome/css/all.min.css') ?>">
-    <link rel="shortcut icon" href="<?= asset('ebudgeting.jpg') ?>" type="image/x-icon">
-    <link rel="shortcut icon" href="<?= asset('ebudgeting.jpg') ?>" type="image/png">
+    <link rel="shortcut icon" href="<?= asset('iconebooking1.png') ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= asset('iconebooking1.png') ?>" type="image/png">
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="<?= asset('stisla-1-2.2.0/dist/assets/modules/bootstrap-social/bootstrap-social.css')?>">
@@ -36,6 +36,18 @@
   }
 </style>
 <body>
+<?php if (\Support\Session::hasFlash('failed')): ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        text: "<?= \Support\Session::flash('failed') ?>",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                </script>
+            <?php endif; ?>
   <div id="app">
     <section class="section">
       <div class="container mt-5">

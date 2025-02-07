@@ -10,8 +10,8 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="<?= asset('stisla-1-2.2.0/dist/assets/modules/bootstrap/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= asset('stisla-1-2.2.0/dist/assets/modules/fontawesome/css/all.min.css') ?>">
-    <link rel="shortcut icon" href="<?= asset('ebudgeting.jpg') ?>" type="image/x-icon">
-    <link rel="shortcut icon" href="<?= asset('ebudgeting.jpg') ?>" type="image/png">
+    <link rel="shortcut icon" href="<?= asset('iconebooking1.png') ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= asset('iconebooking1.png') ?>" type="image/png">
 
     <!-- CSS Libraries -->
 
@@ -72,7 +72,7 @@
                     </ul>
                 </form>
                 <ul class="navbar-nav navbar-right">
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                    <!-- <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
                             class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
                         <div class="dropdown-menu dropdown-list dropdown-menu-right">
                             <div class="dropdown-header">Notifications
@@ -131,7 +131,7 @@
                                 <a href="#">View All <i class="fas fa-chevron-right"></i></a>
                             </div>
                         </div>
-                    </li>
+                    </li> -->
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="<?= asset('stisla-1-2.2.0/dist/assets/img/avatar/avatar-1.png') ?>"
@@ -183,7 +183,7 @@
                         </li>
                         <?php endif; ?>
                         <!-- Menu di luar dropdown -->
-                        <li><a class="nav-link" href="<?= base_url().'/schedule'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url().'/mapschedule'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
                         <li><a class="nav-link" href="<?= base_url().'/booking'?>"><i class="fas fa-money-check-alt"></i><span>Booking</span></a></li>
                         <li><a class="nav-link" href="<?= base_url().'/report'?>"><i class="fas fa-file-invoice-dollar"></i><span>Report</span></a></li>
                     </ul>

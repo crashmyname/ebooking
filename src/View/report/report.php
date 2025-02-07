@@ -262,7 +262,7 @@
             `);
         });
     } else {
-        bookingList.append(`<tr><td colspan="2" class="text-center">Belum ada booking</td></tr>`);
+        bookingList.append(`<tr><td colspan="5" class="text-center">Belum ada booking</td></tr>`);
     }
 
     $("#bookingModal").modal("show");

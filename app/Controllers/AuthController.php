@@ -27,6 +27,7 @@ class AuthController extends BaseController
         if (Auth::attempt($credentials)) {
             return redirect('/home');
         }
+        Session::flash('failed', 'Username atau Password Salah');
         return view('auth/login');
     }
 

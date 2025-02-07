@@ -8,11 +8,11 @@
     </div>
     <div class="card-body">
         <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-futbol"></i></button>
+        <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i class="fas fa-trash"></i></button> 
         <?php if(\Support\Session::user()->role_id == 1): ?>
         <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatebooking">Update <i
                 class="fas fa-user-edit"></i></button>
-        <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i
-                class="fas fa-user-times"></i></button> <button class="btn btn-outline-success" data-toggle="modal"
+        <button class="btn btn-outline-success" data-toggle="modal"
             data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button
             class="btn btn-success" type="submit" id="exportexcel">Export Excel <i
                 class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i
@@ -231,75 +231,87 @@
             e.preventDefault();
             var url = '<?= base_url() . '/booking' ?>';
             var formData = new FormData($('#formaddbooking')[0]);
-            if($('#schedule_id,#lapangan_id').val() == "" || $('#schedule_id').val() == null){
-                Swal.fire({
-                    title: 'Error',
-                    icon: 'error',
-                    text: 'schedule dan lapangan wajib diisi',
-                });
-                return;
-            }
-            $.ajax({
-                type: 'POST',
-                url: url,
-                processData: false,
-                contentType: false,
-                data: formData,
-                dataType: 'json',
-                success: function(response) {
-                    switch(true){
-                        case response.status === 201:
-                            $('#formaddbooking')[0].reset();
-                            Swal.fire({
-                                title: 'Success',
-                                icon: 'success',
-                                text: response.message,
-                            });
-                            table.ajax.reload(null, false);
-                            break;
-                        case response.status === 400:
-                            Swal.fire({
-                                title: 'Info',
-                                icon: 'info',
-                                text: response.message,
-                            });
-                            break;
-                        case response.status === 500:
+            Swal.fire({
+                    title: 'Submit',
+                    icon: 'warning',
+                    text: 'Apakah Data Sudah Benar?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Submit!!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if($('#schedule_id,#lapangan_id').val() == "" || $('#schedule_id').val() == null){
                             Swal.fire({
                                 title: 'Error',
                                 icon: 'error',
-                                text: response.message,
+                                text: 'schedule dan lapangan wajib diisi',
                             });
-                            break;
-                        default:
-                        var errorMessage = '';
+                            return;
+                        }
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            dataType: 'json',
+                            success: function(response) {
+                                switch(true){
+                                    case response.status === 201:
+                                        $('#formaddbooking')[0].reset();
+                                        Swal.fire({
+                                            title: 'Success',
+                                            icon: 'success',
+                                            text: response.message,
+                                        });
+                                        table.ajax.reload(null, false);
+                                        break;
+                                    case response.status === 400:
+                                        Swal.fire({
+                                            title: 'Info',
+                                            icon: 'info',
+                                            text: response.message,
+                                        });
+                                        break;
+                                    case response.status === 500:
+                                        Swal.fire({
+                                            title: 'Error',
+                                            icon: 'error',
+                                            text: response.message,
+                                        });
+                                        break;
+                                    default:
+                                    var errorMessage = '';
 
-                        // Memastikan bahwa response.status adalah objek dan memiliki pesan error
-                        if (response.status && typeof response.status === 'object') {
-                            // Loop untuk setiap field dan pesan errornya
-                            for (var field in response.status) {
-                                if (response.status.hasOwnProperty(field)) {
-                                    response.status[field].forEach(function(message) {
-                                        // Menambahkan pesan error untuk field tertentu
-                                        errorMessage += message +
-                                            '\n'; // Gabungkan pesan dengan enter
+                                    // Memastikan bahwa response.status adalah objek dan memiliki pesan error
+                                    if (response.status && typeof response.status === 'object') {
+                                        // Loop untuk setiap field dan pesan errornya
+                                        for (var field in response.status) {
+                                            if (response.status.hasOwnProperty(field)) {
+                                                response.status[field].forEach(function(message) {
+                                                    // Menambahkan pesan error untuk field tertentu
+                                                    errorMessage += message +
+                                                        '\n'; // Gabungkan pesan dengan enter
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        errorMessage = "An unexpected error occurred.";
+                                    }
+
+                                    // Menampilkan pesan error di SweetAlert
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'error',
+                                        text: errorMessage
+                                            .trim(), // Menghapus spasi ekstra sebelum menampilkan
                                     });
                                 }
                             }
-                        } else {
-                            errorMessage = "An unexpected error occurred.";
-                        }
-
-                        // Menampilkan pesan error di SweetAlert
-                        Swal.fire({
-                            title: 'Error',
-                            icon: 'error',
-                            text: errorMessage
-                                .trim(), // Menghapus spasi ekstra sebelum menampilkan
-                        });
+                        })
                     }
-                }
-            })
+                })
         })
         $('#modalupdateuser').on('click', function(e) {
             e.preventDefault();
@@ -397,7 +409,7 @@
                 })
             }
         })
-        $('#deleteuser').on('click', function(e) {
+        $('#deletebooking').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
@@ -426,9 +438,10 @@
                     if (result.isConfirmed) {
                         selectedData.each(function(data) {
                             const uuid = data.uuid;
+                            const uid = data.users_id;
                             $.ajax({
                                 type: 'DELETE',
-                                url: "<?= base_url() . '/user/' ?>" + uuid,
+                                url: "<?= base_url() . '/booking/' ?>" + uuid + '/' + uid,
                                 success: function(response) {
                                     if (response.status == 200) {
                                         Swal.fire({
@@ -438,6 +451,16 @@
                                             timer: 1500,
                                             timerProgressBar: true,
                                         });
+                                        table.ajax.reload(null, false);
+                                    } else if(response.status == 400){
+                                        Swal.fire({
+                                            title: 'Error',
+                                            icon: 'error',
+                                            text: response.message,
+                                            timer: 1500,
+                                            timerProgressBar: true,
+                                        });
+                                        table.ajax.reload(null, false);
                                     } else {
                                         Swal.fire({
                                             title: 'Error',
@@ -446,6 +469,7 @@
                                             timer: 1500,
                                             timerProgressBar: true,
                                         });
+                                        table.ajax.reload(null, false);
                                     }
                                 }
                             })

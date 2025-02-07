@@ -29,6 +29,23 @@ class ScheduleController extends BaseController
         return view('schedule/schedule',['title' => 'schedule','lapangan'=>$lapangan],'layout/app');
     }
 
+    public function getScheduleUser()
+    {
+        $schedules = Schedule::query()
+        ->leftJoin('lapangan', 'lapangan.lapangan_id', '=', 'schedule.lapangan_id')
+        ->select('schedule.*','lapangan.jenis') 
+        ->orderBy('lapangan.jenis')
+        ->orderBy('schedule.session')
+        ->get();
+
+    // Mengelompokkan data berdasarkan jenis olahraga
+        $groupedSchedules = [];
+        foreach ($schedules as $sch) {
+            $groupedSchedules[$sch->jenis][$sch->start_time . ' - ' . $sch->end_time][$sch->day] = $sch->start_time . ' - ' . $sch->end_time;
+        }
+        return view('schedule/mapschedule',['groupedSchedules'=>$groupedSchedules],'layout/app');
+    }
+
     public function create(Request $request)
     {
         $schedule = Schedule::create([

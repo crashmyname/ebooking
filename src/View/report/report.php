@@ -55,6 +55,13 @@
         /* Warna kuning muda */
         font-weight: bold;
     }
+
+    #loadingIndicator span {
+        font-weight: bold;
+        font-size: 16px;
+        color: #007bff;
+    }
+
 </style>
 <section class="section">
     <div class="section-header">
@@ -63,6 +70,9 @@
 </section>
 <button class="btn btn-secondary btn-sm" onclick="prevMonth()" style="float:left">❮ Sebelumnya</button>
 <button class="btn btn-secondary btn-sm" onclick="nextMonth()" style="float:right">Berikutnya ❯</button>
+<div id="loadingIndicator" style="display: none; text-align: center; margin: 10px;">
+    <span>Loading...</span>
+</div>
 <div class="calendar-container mt-4">
     <table class="calendar-table mt-3">
         <thead>
@@ -122,6 +132,7 @@
     }
 
     function fetchBookings(month, year) {
+        document.getElementById("loadingIndicator").style.display = "block";
         $.ajax({
             url: "<?= base_url() ?>/testbooking",
             method: "GET",
@@ -151,6 +162,10 @@
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching bookings:", error);
+            },
+            complete: function() {
+                // Sembunyikan indikator loading
+                document.getElementById("loadingIndicator").style.display = "none";
             }
         });
     }

@@ -19,10 +19,7 @@ Route::get('/login', function(){
     return view('auth/login');
 });
 Route::post('/login',[AuthController::class,'onLogin']);
-Route::get('/testbooking',function(){
-    $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->get();
-    return Response::json(['status'=>200,'data'=>$booking]);
-});
+Route::get('/testbooking',[BookingController::class, 'getcalenderData']);
 Route::group([AuthMiddleware::class],function(){
     // Options
     Route::post('/testlo',[ApiController::class,'DataApiNama']);

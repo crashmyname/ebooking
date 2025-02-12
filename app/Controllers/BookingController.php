@@ -157,4 +157,12 @@ class BookingController extends BaseController
             return Response::json(['status'=>200,'message'=>'Lapangan berhasil dihapus']);
         }
     }
+
+    public function getcalenderData(Request $request)
+    {
+        // var_dump($request);
+        $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
+        // vd($booking);
+        return Response::json(['status'=>200,'data'=>$booking]);
+    }
 }

@@ -121,22 +121,23 @@
         }
     }
 
-    function fetchBookings() {
+    function fetchBookings(month, year) {
         $.ajax({
             url: "<?= base_url() ?>/testbooking",
             method: "GET",
+            data: { month: month + 1, year }, // Kirim parameter bulan dan tahun
             dataType: "json",
             success: function(response) {
                 if (response.status === 200) {
-                    console.log(response.data);
-                    bookings = {}; // Reset data
+                    // console.log(response.data);
+                    bookings[`${year}-${month}`] = {}; // Reset data untuk bulan tertentu
 
                     response.data.forEach(booking => {
                         let date = booking.booking_date;
-                        if (!bookings[date]) {
-                            bookings[date] = [];
+                        if (!bookings[`${year}-${month}`][date]) {
+                            bookings[`${year}-${month}`][date] = [];
                         }
-                        bookings[date].push({
+                        bookings[`${year}-${month}`][date].push({
                             title: booking.jenis,
                             time: booking.description,
                             session: booking.session,
@@ -145,8 +146,7 @@
                         });
                     });
 
-                    // console.log("Data bookings berhasil dimuat:", bookings);
-                    generateCalendar(currentMonth, currentYear);
+                    generateCalendar(month, year);
                 }
             },
             error: function(xhr, status, error) {
@@ -201,9 +201,9 @@
                     }
 
                     // Tampilkan booking yang sudah ada
-                    if (bookings[cell.dataset.date]) {
+                    if (bookings[`${year}-${month}`] && bookings[`${year}-${month}`][cell.dataset.date]) {
                         cell.classList.add("booked"); // Tambahkan warna biru
-                        bookings[cell.dataset.date].forEach(event => {
+                        bookings[`${year}-${month}`][cell.dataset.date].forEach(event => {
                             let eventDiv = document.createElement("div");
                             eventDiv.classList.add("booking");
                             eventDiv.innerText = `${event.time} - ${event.title}`;
@@ -226,7 +226,13 @@
         } else {
             currentMonth--;
         }
-        generateCalendar(currentMonth, currentYear);
+
+        // Cek apakah data bulan sudah ada di cache
+        if (bookings[`${currentYear}-${currentMonth}`]) {
+            generateCalendar(currentMonth, currentYear);
+        } else {
+            fetchBookings(currentMonth, currentYear); // Load data baru jika belum ada
+        }
     }
 
     function nextMonth() {
@@ -236,37 +242,44 @@
         } else {
             currentMonth++;
         }
-        generateCalendar(currentMonth, currentYear);
+
+        // Cek apakah data bulan sudah ada di cache
+        if (bookings[`${currentYear}-${currentMonth}`]) {
+            generateCalendar(currentMonth, currentYear);
+        } else {
+            fetchBookings(currentMonth, currentYear); // Load data baru jika belum ada
+        }
     }
 
-    // function openBookingModal(date) {
-    //     $("#selectedDate").val(date);
-    //     $("#bookingModal").modal("show");
-    // }
     function openBookingModal(date) {
-    $("#selectedDate").val(date);
+        $("#selectedDate").val(date);
 
-    let bookingList = $("#bookingList");
-    bookingList.empty(); // Kosongkan tabel sebelum mengisi data baru
+        let bookingList = $("#bookingList");
+        bookingList.empty(); // Kosongkan tabel sebelum mengisi data baru
 
-    if (bookings[date] && bookings[date].length > 0) {
-        bookings[date].forEach(event => {
-            bookingList.append(`
-                <tr>
-                    <td>${event.time}</td>
-                    <td>${event.title}</td>
-                    <td>${event.session}</td>
-                    <td>${event.start_time}</td>
-                    <td>${event.end_time}</td>
-                </tr>
-            `);
-        });
-    } else {
-        bookingList.append(`<tr><td colspan="5" class="text-center">Belum ada booking</td></tr>`);
+        // Ubah untuk menggunakan kunci kombinasi year dan month
+        let [year, month, day] = date.split("-");
+        let monthKey = parseInt(month) - 1;
+
+        if (bookings[`${year}-${monthKey}`] && bookings[`${year}-${monthKey}`][date]) {
+            bookings[`${year}-${monthKey}`][date].forEach(event => {
+                bookingList.append(`
+                    <tr>
+                        <td>${event.time}</td>
+                        <td>${event.title}</td>
+                        <td>${event.session}</td>
+                        <td>${event.start_time}</td>
+                        <td>${event.end_time}</td>
+                    </tr>
+                `);
+            });
+        } else {
+            bookingList.append(`<tr><td colspan="5" class="text-center">Belum ada booking</td></tr>`);
+        }
+
+        $("#bookingModal").modal("show");
     }
 
-    $("#bookingModal").modal("show");
-}
 
 
     $("#bookingForm").submit(function(event) {
@@ -287,7 +300,7 @@
     });
 
     $(document).ready(function() {
-        fetchBookings();
+        fetchBookings(currentMonth, currentYear);
         initDataTable();
     });
 </script>

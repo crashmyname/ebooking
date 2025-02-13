@@ -86,14 +86,14 @@
                             <div class="row">
                                 <div class="form-group col-md-6 col-12">
                                     <label>Section</label>
-                                    <input type="text" class="form-control" value="<?= $users->section?>" name="section">
+                                    <input type="text" class="form-control" value="<?= $users->section?>" name="section" readonly>
                                     <div class="invalid-feedback">
                                         Please fill in the email
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 col-12">
                                     <label>Alias Section</label>
-                                    <input type="text" class="form-control" value="<?= $users->singkatan?>" name="alias_sect">
+                                    <input type="text" class="form-control" value="<?= $users->singkatan?>" name="alias_sect" readonly>
                                 </div>
                             </div>
                             <div class="row">

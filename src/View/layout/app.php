@@ -185,7 +185,7 @@
                         <!-- Menu di luar dropdown -->
                         <li><a class="nav-link" href="<?= base_url().'/mapschedule'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
                         <li><a class="nav-link" href="<?= base_url().'/booking'?>"><i class="fas fa-running"></i><span>Booking</span></a></li>
-                        <li><a class="nav-link" href="<?= base_url().'/report'?>"><i class="far fa-calendar-check"></i><span>Cek Booking</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url().'/report'?>"><i class="far fa-calendar-check"></i><span>Check Booking</span></a></li>
                     </ul>
 
                 </aside>

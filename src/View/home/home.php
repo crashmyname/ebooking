@@ -19,8 +19,9 @@
             <div class="col-12 mb-4">
                 <!-- <div class="hero text-white hero-bg-image hero-bg-parallax" style="background-image: url(<?= asset('images/Stanley_Cikupa.jpg')?>);"> -->
                   <div class="hero-inner">
-                    <h2>Welcome Back, <?php echo \Support\Session::user()->name ?>!</h2>
-                    <p class="lead">This page is a place to manage dashboard and more.</p>
+                    <h2>Hi, <?php echo \Support\Session::user()->name ?>!</h2>
+                    <p class="lead">Welcome to PT Indonesia Stanley Electric's E-booking System.
+                        <br>Streamline your bookings with ease and enjoy a convenient booking solution at your fingertips.</p>
                   </div>
                 <!-- </div> -->
               </div>

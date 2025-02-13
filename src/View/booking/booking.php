@@ -9,7 +9,7 @@
     <div class="card-body">
         <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-futbol"></i></button>
         <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i class="fas fa-trash"></i></button> 
-        <?php if(\Support\Session::user()->role_id == 1): ?>
+        <!-- <?php if(\Support\Session::user()->role_id == 1): ?>
         <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatebooking">Update <i
                 class="fas fa-user-edit"></i></button>
         <button class="btn btn-outline-success" data-toggle="modal"
@@ -18,7 +18,7 @@
                 class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i
                 class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i
                 class="far fa-file-pdf"></i></button>
-        <?php endif; ?>
+        <?php endif; ?> -->
         <hr>
         <div class="col-3">
             <input type="date" name="tanggal" id="tanggal" class="form-control">

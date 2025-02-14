@@ -222,7 +222,7 @@
                     render:function(data, type, row){
                         var name = row.users_id;
                         if(<?= \Support\Session::user()->users_id?> != name){
-                            return '<span class="badge badge-danger">'+'Cek'+'</span>';
+                            return '<span class="badge badge-danger">'+'Cek Booking'+'</span>';
                         }
                         return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
                     }

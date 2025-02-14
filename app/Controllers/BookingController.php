@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\Booking;
 use App\Models\Lapangan;
 use App\Models\Schedule;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
+use setasign\Fpdi\Fpdi;
 use Support\BaseController;
 use Support\DataTables;
 use Support\Date;
@@ -164,5 +167,71 @@ class BookingController extends BaseController
         $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
         // vd($booking);
         return Response::json(['status'=>200,'data'=>$booking]);
+    }
+
+    public function generateCard(Request $request, $id)
+    {
+        $booking = Booking::query()->select('booking.uuid','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.uuid','=',$id)->first();
+        // vd($booking);
+        $barcode = $booking->uuid;
+        $options = new QROptions([
+            'version'      => 5, // QR Code version (1-40, lebih besar = lebih banyak data)
+            'outputType'   => QRCode::OUTPUT_IMAGE_PNG, // Output sebagai PNG
+            'eccLevel'     => QRCode::ECC_L, // Tingkat koreksi kesalahan
+            'scale'        => 10, // Ukuran QR Code
+            'imageBase64'  => false, // Jangan menggunakan base64
+            'quietzoneSize'=> 4, // Ukuran margin (quiet zone) di sekitar QR Code
+        ]);
+
+        // Buat objek QRCode dengan opsi
+        $qrcode = new QRCode($options);
+        
+        $directory = __DIR__ . '/../../public/cardbooking';
+        
+
+        // Periksa apakah folder barcode ada, jika tidak buat foldernya
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $filepath = $directory . '/' . $barcode.'.png';
+        
+        $qrcode->render($barcode, $filepath);
+        return view('booking/check-booking',['booking'=>$booking]);
+    }
+
+    public function cardBooking(Request $request, $id)
+    {
+        $booking = Booking::query()->select('booking.uuid','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.uuid','=',$id)->first();
+        // Membuat instance FPDI
+        $pdf = new FPDI;
+        $target = storage_path('card-booking.pdf');
+        // $target = "http://localhost/ebooking/public/card-booking.pdf";
+        // Import halaman template
+        $source = $pdf->setSourceFile($target);
+
+        // Tambahkan data ke dalam PDF
+        $pdf->SetTitle($booking->uuid);
+        for ($i=1; $i<=$source; $i++) {
+            $template = $pdf->importPage($i);
+            $size = $pdf->getTemplateSize($template);
+            $pdf->AddPage($size['orientation'], array($size['width'], $size['height']));
+            $pdf->useTemplate($template);
+            $pdf->SetFont('Arial', 'B', 8); // Pastikan font tersedia
+            $pdf->Text(8.5, 55, $booking->name);
+            $pdf->SetFont('Arial', '', 10); // Pastikan font tersedia
+            $pdf->Text(8.5, 59, $booking->username);
+            $pdf->SetFont('Arial', '', 6); // Pastikan font tersedia
+            $pdf->Text(19, 62.8, $booking->section);
+            $pdf->Text(19, 66.5, $booking->singkatan);
+            $pdf->Text(19, 70.5, $booking->jenis);
+            $pdf->Text(19, 74.1, $booking->session);
+            $pdf->Text(19, 77.8, $booking->start_time . ' - ' . $booking->end_time);
+            $targetpdf = storage_path('cardbooking/');
+            $pdf->Image($targetpdf.$booking->uuid.'.png',11,23,28,28);
+        }
+
+        // Output PDF
+        $pdf->Output('I', 'id_card.pdf');
     }
 }

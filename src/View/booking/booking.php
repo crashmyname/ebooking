@@ -38,6 +38,7 @@
                     <th>Session</th>
                     <th>Status</th>
                     <th>Ket</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tfoot>
@@ -52,6 +53,7 @@
                     <th>Session</th>
                     <th>Status</th>
                     <th>Ket</th>
+                    <th>Action</th>
                 </tr>
             </tfoot>
         </table>
@@ -213,7 +215,14 @@
                 {
                     data: 'description',
                     name: 'description'
-                }
+                },
+                {
+                    data: 'uuid',
+                    name: 'action',
+                    render:function(data, type, row){
+                        return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
+                    }
+                },
             ]
         });
         setTimeout(function() {

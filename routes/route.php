@@ -20,6 +20,8 @@ Route::get('/login', function(){
 });
 Route::post('/login',[AuthController::class,'onLogin']);
 Route::get('/testbooking',[BookingController::class, 'getcalenderData']);
+Route::get('/cardbooking/{id}',[BookingController::class, 'generateCard']);
+Route::get('/card/{id}', [BookingController::class, 'cardBooking']);
 Route::group([AuthMiddleware::class],function(){
     // Options
     Route::post('/testlo',[ApiController::class,'DataApiNama']);

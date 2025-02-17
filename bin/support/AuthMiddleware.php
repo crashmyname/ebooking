@@ -66,7 +66,7 @@ class AuthMiddleware
 
         LoginAct::create([
             'users_id' => $userId,
-            'login_time' => Date::Now(), // Gunakan fungsi bawaan PHP
+            'login_time' => Date::Now(),
             'ip_address' => $ip,
             'hostname' => $hostname,
             'status' => 'logout',

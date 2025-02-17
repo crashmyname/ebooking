@@ -191,7 +191,10 @@
                         <?php if(\Support\Session::user()->role_id == 1 || \Support\Session::user()->role_id == 3): ?>
                         <li><a class="nav-link" href="<?= base_url().'/validation'?>"><i class="fas fa-check-double"></i><span>Validation</span></a></li>
                         <?php endif; ?>
-                    </ul>
+                        <?php if(\Support\Session::user()->role_id == 1): ?>
+                        <li><a class="nav-link" href="<?= base_url().'/loginactivity'?>"><i class="fas fa-users-cog"></i><span>Login Activity</span></a></li>
+                        <?php endif; ?>
+                        </ul>
 
                 </aside>
             </div>

@@ -1,4 +1,5 @@
 <?php
+use App\Controllers\ActivityController;
 use App\Controllers\ApiController;
 use App\Controllers\AuthController;
 use App\Controllers\BookingController;
@@ -71,4 +72,7 @@ Route::group([AuthMiddleware::class],function(){
     Route::post('/status',[StatusController::class, 'create']);
     Route::put('/status/{id}',[StatusController::class, 'update']);
     Route::delete('/status/{id}',[StatusController::class, 'delete']);
+    // Activity
+    Route::get('/getactivity',[ActivityController::class,'LoginActivity']);
+    Route::get('/loginactivity',[ActivityController::class,'index']);
 });

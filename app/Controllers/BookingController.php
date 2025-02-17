@@ -178,7 +178,9 @@ class BookingController extends BaseController
     public function getcalenderData(Request $request)
     {
         // var_dump($request);
-        $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
+        $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
+        ->leftJoin('status','status.status_id','=','booking.status_id')
+        ->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
         // vd($booking);
         return Response::json(['status'=>200,'data'=>$booking]);
     }
@@ -193,14 +195,10 @@ class BookingController extends BaseController
             'imageBase64'  => false, // Jangan menggunakan base64
             'quietzoneSize'=> 4, // Ukuran margin (quiet zone) di sekitar QR Code
         ]);
-
-        // Buat objek QRCode dengan opsi
         $qrcode = new QRCode($options);
         
         $directory = __DIR__ . '/../../public/cardbooking';
-        
 
-        // Periksa apakah folder barcode ada, jika tidak buat foldernya
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
@@ -213,10 +211,7 @@ class BookingController extends BaseController
     public function generateCard(Request $request, $id)
     {
         $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$id)->first();
-        // // vd($booking);
-        // $barcode = $booking->code_booking;
-        // $generate = new BookingController();
-        // $generate->generate($barcode);
+
         return view('booking/check-booking',['booking'=>$booking]);
     }
 
@@ -266,7 +261,12 @@ class BookingController extends BaseController
 
     public function checkBooking(Request $request)
     {
-        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$request->code_booking)->first();
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time','status.status')
+        ->leftJoin('users','users.users_id','=','booking.users_id')
+        ->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
+        ->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')
+        ->leftJoin('status','status.status_id','=','booking.status_id')
+        ->where('booking.code_booking','=',$request->code_booking)->first();
         if($booking){
             return Response::json(['status'=>200,'data'=>$booking->toArray()]);
         } else {

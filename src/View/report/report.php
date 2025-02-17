@@ -111,6 +111,7 @@
                             <th>Session</th>
                             <th>Start</th>
                             <th>End</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="bookingList">
@@ -154,6 +155,7 @@
                             session: booking.session,
                             start_time: booking.start_time,
                             end_time: booking.end_time,
+                            status: booking.status,
                         });
                     });
 
@@ -278,6 +280,14 @@
 
         if (bookings[`${year}-${monthKey}`] && bookings[`${year}-${monthKey}`][date]) {
             bookings[`${year}-${monthKey}`][date].forEach(event => {
+                let statusColor = '';
+                if(event.status == 'Ok'){
+                    statusColor = 'badge badge-primary';
+                } else if(event.status == 'Booked'){
+                    statusColor = 'badge badge-success';
+                } else {
+                    statusColor = 'badge badge-warning';
+                }
                 bookingList.append(`
                     <tr>
                         <td>${event.time}</td>
@@ -285,6 +295,7 @@
                         <td>${event.session}</td>
                         <td>${event.start_time}</td>
                         <td>${event.end_time}</td>
+                        <td><span class="${statusColor}">${event.status}</span></td>
                     </tr>
                 `);
             });

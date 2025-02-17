@@ -46,6 +46,15 @@ class AuthController extends BaseController
 
     public function logout(Request $request)
     {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
+        $hostname = gethostbyaddr($ip);
+        LoginAct::create([
+            'users_id' => Session::user()->users_id,
+            'login_time' => Date::Now(),
+            'ip_address' => $ip,
+            'hostname' => $hostname,
+            'status' => 'logout',
+        ]);
         Session::destroy();
         return redirect('/login');
     }

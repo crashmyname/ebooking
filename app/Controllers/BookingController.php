@@ -135,6 +135,8 @@ class BookingController extends BaseController
                 ]);
                 DB::commit();
                 if($booking){
+                    $generate = new BookingController();
+                    $generate->generate($booking->code_booking);
                     return Response::json(['status'=>201,'message'=>'Booking berhasil']);
                 }
             } catch (\Exception $e) {
@@ -181,11 +183,8 @@ class BookingController extends BaseController
         return Response::json(['status'=>200,'data'=>$booking]);
     }
 
-    public function generateCard(Request $request, $id)
+    public function generate($barcode)
     {
-        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$id)->first();
-        // vd($booking);
-        $barcode = $booking->code_booking;
         $options = new QROptions([
             'version'      => 5, // QR Code version (1-40, lebih besar = lebih banyak data)
             'outputType'   => QRCode::OUTPUT_IMAGE_PNG, // Output sebagai PNG
@@ -209,6 +208,15 @@ class BookingController extends BaseController
         $filepath = $directory . '/' . $barcode.'.png';
         
         $qrcode->render($barcode, $filepath);
+    }
+
+    public function generateCard(Request $request, $id)
+    {
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$id)->first();
+        // // vd($booking);
+        // $barcode = $booking->code_booking;
+        // $generate = new BookingController();
+        // $generate->generate($barcode);
         return view('booking/check-booking',['booking'=>$booking]);
     }
 

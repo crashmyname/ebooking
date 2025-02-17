@@ -1,0 +1,5 @@
+<?= $ip?><br>
+<?= $hostname?><br>
+<?= $user_agent?><br>
+<?= $ips?><br>
+<?= $remote_addt?><br>

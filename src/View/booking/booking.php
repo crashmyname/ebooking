@@ -221,10 +221,17 @@
                     name: 'action',
                     render:function(data, type, row){
                         var name = row.users_id;
-                        if(<?= \Support\Session::user()->users_id?> != name){
-                            return '<span class="badge badge-danger">'+'Cek Booking'+'</span>';
+                        switch(true){
+                            case <?= \Support\Session::user()->users_id?> != name && <?= \Support\Session::user()->users_id?> != 1:
+                                return '<span class="badge badge-danger">'+'Cek Booking'+'</span>';
+                            break;
+                            case <?= \Support\Session::user()->users_id?> == 1:
+                                return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
+                                break;
+                            default:
+                                return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
+                            break;
                         }
-                        return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
                     }
                 },
             ]
@@ -284,6 +291,13 @@
                                         Swal.fire({
                                             title: 'Info',
                                             icon: 'info',
+                                            text: response.message,
+                                        });
+                                        break;
+                                    case response.status === 422:
+                                        Swal.fire({
+                                            title: 'Error',
+                                            icon: 'error',
                                             text: response.message,
                                         });
                                         break;

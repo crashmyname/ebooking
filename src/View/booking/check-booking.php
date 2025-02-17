@@ -76,8 +76,9 @@
                                         <div class="card-header-action">
                                         </div>
                                     </div>
+                                    <center>
                                     <div class="card-body">
-                                        <div class="mb-2 text-muted">Click the barcode below to see the zoom barcode!
+                                        <div class="mb-2 text-muted">Code : <?= $booking->uuid?>
                                         </div>
                                         <div class="chocolat-parent">
                                             <a href="<?= asset('cardbooking/').$booking->uuid.'.png' ?>"
@@ -90,9 +91,10 @@
                                             </a>
                                         </div>
                                     </div>
+                                    </center>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-12 col-lg-5">
+                            <div class="col-12 col-md-12 col-lg-6">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>Detail Barcode</h4>

@@ -206,8 +206,7 @@ class BookingController extends BaseController
         // Membuat instance FPDI
         $pdf = new FPDI;
         $target = storage_path('card-booking.pdf');
-        // $target = "http://localhost/ebooking/public/card-booking.pdf";
-        // Import halaman template
+
         $source = $pdf->setSourceFile($target);
 
         // Tambahkan data ke dalam PDF
@@ -233,5 +232,26 @@ class BookingController extends BaseController
 
         // Output PDF
         $pdf->Output('I', 'id_card.pdf');
+    }
+
+    public function activity()
+    {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
+        $hostname = gethostbyaddr($ip);
+        $getip = new BookingController();
+        $c = $getip->getIP();
+        return view('test',['ip'=>$ip,'hostname'=>$hostname,'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'ips'=>$c,'remote_addt'=>$_SERVER['REMOTE_ADDR']]);
+    }
+
+    public function getIP()
+    {
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            return trim($ipList[0]);
+        } elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            return $_SERVER['HTTP_CLIENT_IP'];
+        } else {
+            return $_SERVER['REMOTE_ADDR'];
+        }
     }
 }

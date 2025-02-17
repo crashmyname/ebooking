@@ -268,7 +268,7 @@ class BookingController extends BaseController
         ->leftJoin('status','status.status_id','=','booking.status_id')
         ->where('booking.code_booking','=',$request->code_booking)->first();
         if($booking){
-            return Response::json(['status'=>200,'data'=>$booking->toArray()]);
+            return Response::json(['status'=>200,'data'=>$booking->toArray(),'message'=>'Data ditemukan']);
         } else {
             return Response::json(['status'=>500,'message'=>'Data tidak ditemukan']);
         }

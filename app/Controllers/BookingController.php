@@ -250,7 +250,7 @@ class BookingController extends BaseController
 
     public function viewValidasi(Request $request)
     {
-        if(Session::user()->role_id != 1){
+        if(Session::user()->role_id == 2){
             return View::error('errors/401');
         }
         return view('booking/validasi-booking',[],'layout/app');

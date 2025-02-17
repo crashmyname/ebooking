@@ -96,6 +96,11 @@ class BookingController extends BaseController
         if($cekbooking){
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
+        $hostname = gethostbyaddr($ip);
+        if($ip == '10.203.64.3' || $ip == '10.203.80.2'){
+            return Response::json(['status'=>500,'message'=>'Anda tidak bisa booking dari jaringan VPN']);
+        }
         // Validasi jika pengguna sudah booking pada lapangan yang sama, tapi di sesi berbeda
         $cekUserBooking = Booking::query()
         ->where('lapangan_id', '=', $request->lapangan_id)

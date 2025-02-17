@@ -423,6 +423,21 @@ class BaseModel
         }
     }
 
+    public static function exists($conditions)
+    {
+        $query = static::query();
+
+        // Tambahkan semua kondisi where
+        foreach ($conditions as $field => $value) {
+            $query->where($field, '=', $value);
+        }
+
+        // Periksa apakah ada data dengan membatasi hasil ke satu dan memeriksa jika ada hasil
+        $result = $query->first();
+
+        return $result !== null;
+    }
+
     public static function create($attributes)
     {
         try {

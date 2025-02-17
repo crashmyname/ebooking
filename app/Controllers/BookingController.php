@@ -28,7 +28,7 @@ class BookingController extends BaseController
         if (Request::isAjax()) {
             if($request->tanggal){
                 $booking = Booking::query()
-                ->select('booking_id','booking.uuid','lapangan.jenis','users.name','booking_date','schedule.start_time','schedule.end_time','schedule.session','status.status','booking.description','schedule.day','users.users_id')
+                ->select('booking_id','booking.uuid','lapangan.jenis','users.name','booking_date','schedule.start_time','schedule.end_time','schedule.session','status.status','booking.description','schedule.day','users.users_id','booking.code_booking')
                 ->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
                 ->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')
                 ->leftJoin('users','users.users_id','=','booking.users_id')
@@ -97,16 +97,22 @@ class BookingController extends BaseController
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
-        $hostname = gethostbyaddr($ip);
         if($ip == '10.203.64.3' || $ip == '10.203.80.2'){
             return Response::json(['status'=>500,'message'=>'Anda tidak bisa booking dari jaringan VPN']);
         }
-        // Validasi jika pengguna sudah booking pada lapangan yang sama, tapi di sesi berbeda
+        
         $cekUserBooking = Booking::query()
         ->where('lapangan_id', '=', $request->lapangan_id)
         ->where('booking_date', '=', $request->booking_date)
         ->where('users_id', '=', Session::user()->users_id)
         ->first();
+
+        $validasi = Validator::make(['code_booking' => UUID::Uniqe()],
+        ['code_booking' => 'required|unqie:booking,code_booking']);
+
+        if($validasi){
+            return Response::json(['status'=>500,'message'=>$validasi]);
+        }
 
         if ($cekUserBooking) {
             return Response::json(['status' => 500, 'message' => 'Anda sudah melakukan booking lapangan yang sama di sesi lain']);
@@ -117,6 +123,7 @@ class BookingController extends BaseController
             try{
                 $booking = Booking::create([
                     'uuid' => UUID::generateUuid(),
+                    'code_booking' => UUID::Uniqe(),
                     'users_id' => Session::user()->users_id,
                     'lapangan_id' => $request->lapangan_id,
                     'booking_date' => $request->booking_date,
@@ -176,9 +183,9 @@ class BookingController extends BaseController
 
     public function generateCard(Request $request, $id)
     {
-        $booking = Booking::query()->select('booking.uuid','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.uuid','=',$id)->first();
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$id)->first();
         // vd($booking);
-        $barcode = $booking->uuid;
+        $barcode = $booking->code_booking;
         $options = new QROptions([
             'version'      => 5, // QR Code version (1-40, lebih besar = lebih banyak data)
             'outputType'   => QRCode::OUTPUT_IMAGE_PNG, // Output sebagai PNG
@@ -207,7 +214,7 @@ class BookingController extends BaseController
 
     public function cardBooking(Request $request, $id)
     {
-        $booking = Booking::query()->select('booking.uuid','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.uuid','=',$id)->first();
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$id)->first();
         // Membuat instance FPDI
         $pdf = new FPDI;
         $target = storage_path('card-booking.pdf');
@@ -215,7 +222,7 @@ class BookingController extends BaseController
         $source = $pdf->setSourceFile($target);
 
         // Tambahkan data ke dalam PDF
-        $pdf->SetTitle($booking->uuid);
+        $pdf->SetTitle($booking->code_booking);
         for ($i=1; $i<=$source; $i++) {
             $template = $pdf->importPage($i);
             $size = $pdf->getTemplateSize($template);
@@ -232,11 +239,39 @@ class BookingController extends BaseController
             $pdf->Text(19, 74.1, $booking->session);
             $pdf->Text(19, 77.8, $booking->start_time . ' - ' . $booking->end_time);
             $targetpdf = storage_path('cardbooking/');
-            $pdf->Image($targetpdf.$booking->uuid.'.png',11,23,28,28);
+            $pdf->Image($targetpdf.$booking->code_booking.'.png',11.5,23,27,27);
+            $pdf->SetFont('Arial', '', 6); // Pastikan font tersedia
+            $pdf->Text(17,51, 'Code : '.$booking->code_booking);
         }
 
         // Output PDF
         $pdf->Output('I', 'id_card.pdf');
+    }
+
+    public function viewValidasi(Request $request)
+    {
+        if(Session::user()->role_id != 1){
+            return View::error('errors/401');
+        }
+        return view('booking/validasi-booking',[],'layout/app');
+    }
+
+    public function checkBooking(Request $request)
+    {
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time')->leftJoin('users','users.users_id','=','booking.users_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->where('booking.code_booking','=',$request->code_booking)->first();
+        if($booking){
+            return Response::json(['status'=>200,'data'=>$booking->toArray()]);
+        } else {
+            return Response::json(['status'=>500,'message'=>'Data tidak ditemukan']);
+        }
+    }
+
+    public function validasi(Request $request,$id)
+    {
+        $booking = Booking::query()->where('code_booking','=',$id)->first();
+        $booking->status_id = 3;
+        $booking->save();
+        return Response::json(['status'=>200,'message'=>'Booking berhasil divalidasi']);
     }
 
     public function activity()

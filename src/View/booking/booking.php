@@ -209,7 +209,11 @@
                     data: 'status',
                     name: 'status',
                     render:function(data,type,row){
-                        return '<span class="badge badge-success">'+data+'</span>';
+                        if(data == 'Booked'){
+                            return '<span class="badge badge-success">'+data+'</span>';
+                        } else {
+                            return '<span class="badge badge-primary">'+data+'</span>';
+                        }
                     }
                 },
                 {
@@ -217,7 +221,7 @@
                     name: 'description'
                 },
                 {
-                    data: 'uuid',
+                    data: 'code_booking',
                     name: 'action',
                     render:function(data, type, row){
                         var name = row.users_id;

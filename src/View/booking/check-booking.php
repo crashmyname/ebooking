@@ -78,14 +78,14 @@
                                     </div>
                                     <center>
                                     <div class="card-body">
-                                        <div class="mb-2 text-muted">Code : <?= $booking->uuid?>
+                                        <div class="mb-2 text-muted">Code : <?= $booking->code_booking?>
                                         </div>
                                         <div class="chocolat-parent">
-                                            <a href="<?= asset('cardbooking/').$booking->uuid.'.png' ?>"
+                                            <a href="<?= asset('cardbooking/').$booking->code_booking.'.png' ?>"
                                                 class="chocolat-image" title="Just an example">
                                                 <div data-crop-image="">
                                                     <img alt="image"
-                                                        src="<?= asset('cardbooking/').$booking->uuid.'.png' ?>"
+                                                        src="<?= asset('cardbooking/').$booking->code_booking.'.png' ?>"
                                                         class="img-fluid" width="360px">
                                                 </div>
                                             </a>
@@ -99,7 +99,7 @@
                                     <div class="card-header">
                                         <h4>Detail Barcode</h4>
                                         <div class="card-header-action">
-                                            <a href="<?= base_url().'/card/'.$booking->uuid?>" class="btn btn-primary">Download Booking</a>
+                                            <a href="<?= base_url().'/card/'.$booking->code_booking?>" class="btn btn-primary">Download Booking</a>
                                         </div>
                                     </div>
                                     <div class="card-body">

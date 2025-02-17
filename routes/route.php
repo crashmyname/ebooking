@@ -32,6 +32,9 @@ Route::group([AuthMiddleware::class],function(){
     Route::get('/profile',[HomeController::class,'profile']);
     Route::get('/settings',[HomeController::class,'settings']);
     Route::get('/home',[HomeController::class,'dashboard']);
+    Route::get('/validation', [BookingController::class, 'viewValidasi']);
+    Route::get('/validasi/{id}',[BookingController::class,'validasi']);
+    Route::post('/check',[BookingController::class,'checkBooking']);
     // Users
     Route::get('/getusers',[UserController::class,'getUser']);
     Route::get('/users',[UserController::class,'index']);

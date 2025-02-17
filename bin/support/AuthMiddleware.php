@@ -1,78 +1,76 @@
 <?php
 namespace Support;
+use App\Models\LoginAct;
+use App\Models\User;
 
 class AuthMiddleware
 {
+    protected $userId;
+
+    public function __construct() {
+        // Pastikan kita mendapatkan user ID dari session
+        if (\Support\Session::has('user')) {
+            $this->userId = \Support\Session::user()->users_id;
+
+            // Simpan user ID ke dalam session terpisah jika belum disimpan
+            if (!isset($_SESSION['user_id_persistent'])) {
+                $_SESSION['user_id_persistent'] = $this->userId;
+            }
+        } else {
+            // Jika session user habis, gunakan user ID dari session persistent
+            $this->userId = $_SESSION['user_id_persistent'] ?? null;
+        }
+    }
+
     public function handle() {
         // Pengecekan login
         if (!$this->checkLogin()) {
-            // include __DIR__ . '/../../app/Handle/errors/401.php';
+            $this->logLogoutActivity($this->userId);
             return redirect('/login');
-            // View::redirectTo('/');
-            // exit();
         }
-        
-        // Token check, jika Anda ingin juga memvalidasi token di middleware ini
-        // Jika Anda hanya membutuhkan login, Anda bisa menghilangkan bagian ini.
-        // if (!$this->checkToken()) {
-        //     include __DIR__ . '/../../app/Handle/errors/401.php';
-        //     exit();
-        // }
     }
 
     public function checkLogin() {
         if (!\Support\Session::has('user')) {
-            http_response_code(401);
-            View::error('errors/401');
-            return false;
+            $this->logLogoutActivity($this->userId);
+            if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+                http_response_code(401); // Unauthorized
+                exit;
+            } else {
+                return redirect('/login');
+            }
         }
 
         $session_lifetime = env('SESSION_LIFETIME')*60;
         $current_time = time();
         
         if (isset($_SESSION['login_time']) && ($current_time - $_SESSION['login_time']) > $session_lifetime) {
+            $this->logLogoutActivity($this->userId);
             session_unset();
             session_destroy();
-            http_response_code(401); // Unauthorized
-            return false;
+            if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+                http_response_code(401); // Unauthorized
+                exit;
+            } else {
+                return redirect('/login');
+            }
         }
         
         $_SESSION['login_time'] = $current_time;
         return true;
     }
 
-    public function checkToken() {
-        $headers = getallheaders();
+    private function logLogoutActivity($userId) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
+        $hostname = gethostbyaddr($ip);
 
-        // Jika tidak ada token di header
-        if (!isset($headers['Authorization'])) {
-            header('Content-Type: application/json');
-            header("HTTP/1.1 401 Unauthorized");
-            echo json_encode(['error' => 'Token tidak ditemukan']);
-            return false;
-        }
-
-        // Ambil token dari header
-        $authHeader = $headers['Authorization'];
-        list($bearer, $token) = explode(' ', $authHeader);
-
-        // Validasi format token
-        if (strtolower($bearer) !== 'bearer' || empty($token)) {
-            header('Content-Type: application/json');
-            header("HTTP/1.1 401 Unauthorized");
-            echo json_encode(['error' => 'Format token salah']);
-            return false;
-        }
-
-        // Validasi token
-        if (!isset($_SESSION['token']) || $_SESSION['token'] !== $token) {
-            header('Content-Type: application/json');
-            header("HTTP/1.1 401 Unauthorized");
-            echo json_encode(['error' => 'Token tidak valid']);
-            return false;
-        }
-
-        return true;
+        LoginAct::create([
+            'users_id' => $userId,
+            'login_time' => Date::Now(), // Gunakan fungsi bawaan PHP
+            'ip_address' => $ip,
+            'hostname' => $hostname,
+            'status' => 'logout',
+        ]);
     }
 }
 ?>

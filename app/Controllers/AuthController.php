@@ -2,8 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\LoginAct;
+use App\Models\User;
 use Support\Auth;
 use Support\BaseController;
+use Support\Date;
 use Support\Request;
 use Support\Session;
 use Support\Validator;
@@ -25,6 +28,16 @@ class AuthController extends BaseController
             'password' => $request->password,
         ];
         if (Auth::attempt($credentials)) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
+            $hostname = gethostbyaddr($ip);
+            $cekuser = User::query()->where('username','=', $request->username)->first();
+            LoginAct::create([
+                'users_id' => $cekuser->users_id,
+                'login_time' => Date::Now(),
+                'ip_address' => $ip,
+                'hostname' => $hostname,
+                'status' => 'login',
+            ]);
             return redirect('/home');
         }
         Session::flash('failed', 'Username atau Password Salah');

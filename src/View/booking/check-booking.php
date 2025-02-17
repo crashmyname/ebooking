@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="chocolat-parent">
                                             <a href="<?= asset('cardbooking/').$booking->code_booking.'.png' ?>"
-                                                class="chocolat-image" title="Just an example">
+                                                class="chocolat-image" title="Code Booking">
                                                 <div data-crop-image="">
                                                     <img alt="image"
                                                         src="<?= asset('cardbooking/').$booking->code_booking.'.png' ?>"

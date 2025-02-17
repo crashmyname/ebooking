@@ -163,7 +163,7 @@
                 data: function(d) {
                     // Tambahkan nilai fiscal dari dropdown ke parameter AJAX
                     d.tanggal = $('#tanggal').val();
-                    console.log(d.tanggal);
+                    // console.log(d.tanggal);
                 },
             },
             processing: true,
@@ -607,7 +607,7 @@
                 submit(); // Panggil fungsi submit saat tanggal berubah
             });
 
-            console.log("Tanggal default:", formattedDate);
+            // console.log("Tanggal default:", formattedDate);
         } else {
             console.error("Elemen dengan ID 'tanggal' atau 'booking_date' tidak ditemukan.");
         }

@@ -145,7 +145,6 @@
                                 $('#booking-link').attr('href', '<?= asset('cardbooking/') ?>' + response.data.code_booking + '.png');
                                 $('#booking-link img').attr('src', '<?= asset('cardbooking/') ?>' + response.data.code_booking + '.png');
                                 $('#download-booking').attr('href', '<?= base_url().'/card/' ?>' + response.data.code_booking);
-                                console.log(response.data.status);
                                 if(response.data.status == 'Booked'){
                                     $('#confirm').show();
                                     $('#confirm').attr('href', '<?= base_url().'/validasi/' ?>' + response.data.code_booking);

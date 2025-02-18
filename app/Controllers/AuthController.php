@@ -31,6 +31,9 @@ class AuthController extends BaseController
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
             $hostname = gethostbyaddr($ip);
             $cekuser = User::query()->where('username','=', $request->username)->first();
+            $user = User::query()->where('users_id','=',$cekuser->users_id)->first();
+            $user->flag = 1;
+            $user->save();
             LoginAct::create([
                 'users_id' => $cekuser->users_id,
                 'login_time' => Date::Now(),
@@ -48,6 +51,9 @@ class AuthController extends BaseController
     {
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
         $hostname = gethostbyaddr($ip);
+        $user = User::query()->where('users_id','=',Session::user()->users_id)->first();
+        $user->flag = 0;
+        $user->save();
         LoginAct::create([
             'users_id' => Session::user()->users_id,
             'login_time' => Date::Now(),

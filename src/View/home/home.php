@@ -39,7 +39,7 @@
                             <h4>Total Users</h4>
                         </div>
                         <div class="card-body">
-                            10
+                            <?= $user?>
                         </div>
                     </div>
                 </div>
@@ -47,14 +47,14 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-danger">
-                        <i class="far fa-newspaper"></i>
+                        <i class="fas fa-basketball-ball"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
                             <h4>Sports</h4>
                         </div>
                         <div class="card-body">
-                            42
+                            <?= $sport?>
                         </div>
                     </div>
                 </div>
@@ -62,14 +62,14 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-warning">
-                        <i class="far fa-file"></i>
+                        <i class="fas fa-running"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
                             <h4>Booking Today</h4>
                         </div>
                         <div class="card-body">
-                            1,201
+                            <?= $booking?>
                         </div>
                     </div>
                 </div>
@@ -77,14 +77,14 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-success">
-                        <i class="fas fa-circle"></i>
+                        <i class="fas fa-user-check"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
                             <h4>Online Users</h4>
                         </div>
                         <div class="card-body">
-                            47
+                            <?= $online?>
                         </div>
                     </div>
                 </div>

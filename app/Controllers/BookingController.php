@@ -180,6 +180,7 @@ class BookingController extends BaseController
         // var_dump($request);
         $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
         ->leftJoin('status','status.status_id','=','booking.status_id')
+        ->leftJoin('users','users.users_id','=','booking.users_id')
         ->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
         // vd($booking);
         return Response::json(['status'=>200,'data'=>$booking]);

@@ -7,7 +7,7 @@
         <b>Schedule Management</b>
     </div>
     <div class="card-body">
-        <a href="<?= base_url()?>/report" class="btn btn-success">Check Booking</a>
+        <?= \Support\Session::user()->role_id == 3 ? '' : '<a href="<?= base_url()?>/report" class="btn btn-success">Check Booking</a>'?>
     </div>
     <div class="card-body">
         <table id="" border="1" class="display" style="width:100%">

@@ -106,6 +106,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Name</th>
                             <th>Section</th>
                             <th>Sport</th>
                             <th>Session</th>
@@ -150,6 +151,7 @@
                             bookings[`${year}-${month}`][date] = [];
                         }
                         bookings[`${year}-${month}`][date].push({
+                            name: booking.name,
                             title: booking.jenis,
                             time: booking.description,
                             session: booking.session,
@@ -290,6 +292,7 @@
                 }
                 bookingList.append(`
                     <tr>
+                        <td>${event.name}</td>
                         <td>${event.time}</td>
                         <td>${event.title}</td>
                         <td>${event.session}</td>
@@ -300,7 +303,7 @@
                 `);
             });
         } else {
-            bookingList.append(`<tr><td colspan="5" class="text-center">Belum ada booking</td></tr>`);
+            bookingList.append(`<tr><td colspan="7" class="text-center">Belum ada booking</td></tr>`);
         }
 
         $("#bookingModal").modal("show");

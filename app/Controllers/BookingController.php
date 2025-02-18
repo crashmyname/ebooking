@@ -144,7 +144,7 @@ class BookingController extends BaseController
                 return Response::json(['status'=>500,'message'=>$e->getMessage()]);
             }
         } else {
-            return Response::json(['status'=>400,'message'=>'Tanggal yang dipilih tidak boleh lebih dari 14 hari']);
+            return Response::json(['status'=>400,'message'=>'Tanggal yang dipilih tidak boleh lebih dari 30 hari']);
         }
     }
 

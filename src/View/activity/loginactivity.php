@@ -8,6 +8,15 @@
     </div>
     <div class="card-body">
     </div>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            <input type="date" name="start_date" id="start_date" class="form-control">
+        </div>
+        <div class="col-3">
+            <input type="date" name="end_date" id="end_date" class="form-control">
+        </div>
+    </div>
     <div class="card-body">
         <table id="datatable" class="display" style="width:100%">
             <thead>
@@ -36,13 +45,35 @@
     </div>
 </section>
 <script>
+    function formatDate(date) {
+            let year = date.getFullYear();
+            let month = ('0' + (date.getMonth() + 1)).slice(-2); // +1 karena bulan dimulai dari 0
+            let day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+    }
+    function getDate(){
+            let today = new Date();
+            var startdate = document.getElementById('start_date');
+            var enddate = document.getElementById('end_date');
+            let defaultDate = today;
+            let formattedDate = formatDate(defaultDate);
+            startdate.value = formattedDate;
+            enddate.value = formattedDate;
+    }
     // Fungsi inisialisasi DataTables khusus untuk halaman ini
     function initDataTable() {
         if ($.fn.dataTable.isDataTable('#datatable')) {
             $('#datatable').DataTable().clear().destroy(); // Hancurkan DataTable yang sudah ada
         }
-        $('#datatable').DataTable({
-            ajax: '<?= base_url() ?>/getactivity',
+        var table = $('#datatable').DataTable({
+            ajax: {
+                url: '<?= base_url() ?>/getactivity',
+                type: 'GET',
+                data: function(d) {
+                    d.start_date = $('#start_date').val();
+                    d.end_date = $('#end_date').val();
+                },
+            },
             processing: true,
             serverSide: true,
             select: true,
@@ -78,12 +109,20 @@
                     data: 'status',
                     name: 'status'
                 },
-            ]
+            ],
+            order: [0, 'desc'],
+        });
+        setTimeout(function() {
+            $('#start_date,#end_date').trigger('change');
+        }, 100);
+        $('#start_date,#end_date').change(function() {
+            table.ajax.reload();
         });
     }
 
     // Panggil initDataTable saat halaman Products dimuat
     $(document).ready(function() {
         initDataTable();
+        getDate();
     });
 </script>

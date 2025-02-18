@@ -189,6 +189,22 @@ class BaseModel
         return $this;
     }
 
+    public function whereBetween($column, $start, $end)
+    {
+        // Generate unique parameter names to prevent conflicts
+        $paramStart = str_replace('.', '_', $column) . "_start_" . count($this->whereParams);
+        $paramEnd = str_replace('.', '_', $column) . "_end_" . count($this->whereParams);
+
+        // Tambahkan kondisi WHERE ke array
+        $this->whereConditions[] = "{$column} BETWEEN :{$paramStart} AND :{$paramEnd}";
+
+        // Tambahkan parameter ke array parameter
+        $this->whereParams[":{$paramStart}"] = $start;
+        $this->whereParams[":{$paramEnd}"] = $end;
+
+        return $this;
+    }
+
     public function innerJoin($table, $first, $operator, $second)
     {
         return $this->join($table, $first, $operator, $second, 'INNER');

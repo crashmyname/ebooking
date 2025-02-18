@@ -161,9 +161,7 @@
                 url: '<?= base_url() ?>/getbooking',
                 type: 'GET',
                 data: function(d) {
-                    // Tambahkan nilai fiscal dari dropdown ke parameter AJAX
                     d.tanggal = $('#tanggal').val();
-                    // console.log(d.tanggal);
                 },
             },
             processing: true,

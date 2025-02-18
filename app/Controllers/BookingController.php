@@ -232,19 +232,38 @@ class BookingController extends BaseController
             $size = $pdf->getTemplateSize($template);
             $pdf->AddPage($size['orientation'], array($size['width'], $size['height']));
             $pdf->useTemplate($template);
-            $pdf->SetFont('Arial', 'B', 8); // Pastikan font tersedia
-            $pdf->Text(8.5, 55, $booking->name);
-            $pdf->SetFont('Arial', '', 10); // Pastikan font tersedia
-            $pdf->Text(8.5, 59, $booking->username);
             $pdf->SetFont('Arial', '', 6); // Pastikan font tersedia
-            $pdf->Text(19, 62.8, $booking->section);
-            $pdf->Text(19, 66.5, $booking->singkatan);
-            $pdf->Text(19, 70.5, $booking->jenis);
-            $pdf->Text(19, 74.1, $booking->session);
-            $pdf->Text(19, 77.8, $booking->start_time . ' - ' . $booking->end_time);
+            if(strlen($booking->name) >= 16){
+                $lines = explode("\n", wordwrap($booking->name, 20, "\n"));
+                $maxWidth = 29;
+                $lineHeight = 1.4;
+                $x = 11;
+                $y = 52.5;
+                $pdf->setXY($x, $y);
+                foreach ($lines as $index => $line) {
+                    $pdf->MultiCell($maxWidth, $lineHeight, $line, 0, 'C', false);
+                    $pdf->SetXY($x, $pdf->GetY() + $lineHeight);
+                }
+            } else if(strlen($booking->name) <= 7){
+                $pdf->Text(20, 55, $booking->name);
+            } else {
+                $pdf->Text(18, 55, $booking->name);
+            }
+            $pdf->SetFont('Arial', 'B', 7); // Pastikan font tersedia
+            if(strlen($booking->username) <= 5){
+                $pdf->Text(21.5, 59.5, $booking->username);
+            } else {
+                $pdf->Text(18, 59.5, $booking->username);
+            }
+            $pdf->SetFont('Arial', '', 5.5); // Pastikan font tersedia
+            $pdf->Text(18, 62.8, $booking->section);
+            $pdf->Text(18, 66.5, $booking->singkatan);
+            $pdf->Text(18, 70.5, $booking->jenis);
+            $pdf->Text(18, 74.1, $booking->session);
+            $pdf->Text(18, 77.8, $booking->start_time . ' - ' . $booking->end_time);
             $targetpdf = storage_path('cardbooking/');
             $pdf->Image($targetpdf.$booking->code_booking.'.png',11.5,23,27,27);
-            $pdf->SetFont('Arial', '', 6); // Pastikan font tersedia
+            $pdf->SetFont('Arial', 'B', 6); // Pastikan font tersedia
             $pdf->Text(17,51, 'Code : '.$booking->code_booking);
         }
 

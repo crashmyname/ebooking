@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <div class="simple-footer color-white">
-                            Copyright &copy; Stisla 2018 | Develop By : Fadli Azka Prayogi
+                            Develop By : Fadli Azka Prayogi
                         </div>
                     </div>
                 </div>

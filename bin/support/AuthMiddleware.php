@@ -32,7 +32,7 @@ class AuthMiddleware
 
     public function checkLogin() {
         if (!\Support\Session::has('user')) {
-            $this->logLogoutActivity($this->userId);
+            // $this->logLogoutActivity($this->userId);
             if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
                 http_response_code(401); // Unauthorized
                 exit;

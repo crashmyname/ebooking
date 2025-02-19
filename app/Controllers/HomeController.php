@@ -57,4 +57,17 @@ class HomeController extends BaseController
         $onlineuser = User::query()->where('flag','=',1)->count();
         return view('home/home',['title' => $title,'hari'=>$hari,'user'=>$user,'sport'=>$sport,'booking'=>$bookingtoday,'online'=>$onlineuser],'layout/app');
     }
+
+    public function monitor()
+    {
+        $date = Date::Now();
+        $format = Date::parse($date)->format('Y-m-d');
+        $booking = Booking::query()->leftJoin('schedule','booking.schedule_id','=','schedule.schedule_id')
+            ->leftJoin('lapangan','schedule.lapangan_id','=','lapangan.lapangan_id')
+            ->leftJoin('users','booking.users_id','=','users.users_id')
+            ->whereDate('booking.booking_date',$format)
+            ->get();
+            // vd($booking);
+        return view('monitor',['booking'=>$booking]);
+    }
 }

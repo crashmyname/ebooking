@@ -184,7 +184,7 @@
                         <?php endif; ?>
                         <!-- Menu di luar dropdown -->
                         <li><a class="nav-link" href="<?= base_url().'/mapschedule'?>"><i class="fas fa-tasks"></i><span>Schedule</span></a></li>
-                        <?php if(\Support\Session::user()->role_id != 3): ?>
+                        <?php if(\Support\Session::user()->role_id != 3 && \Support\Session::user()->role_id != 4): ?>
                         <li><a class="nav-link" href="<?= base_url().'/booking'?>"><i class="fas fa-running"></i><span>Booking</span></a></li>
                         <?php endif; ?>
                         <li><a class="nav-link" href="<?= base_url().'/report'?>"><i class="far fa-calendar-check"></i><span>Check Booking</span></a></li>

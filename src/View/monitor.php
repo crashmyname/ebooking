@@ -118,7 +118,14 @@
                                                 <tr>
                                                     <td>Status</td>
                                                     <td></td>
-                                                    <td><?= $book->status_id == 2 ? '<button class="btn btn-disabled btn-success">Booking</button></td>' : '<button class="btn btn-disabled btn-danger">Not Playing</button></td>' ?>
+                                                    <td><?php if($book->status_id == 2): ?>
+                                                        <button class="btn btn-disabled btn-success">Booking</button>
+                                                        <?php elseif($book->status_id == 3): ?>
+                                                        <button class="btn btn-disabled btn-primary">Now Playing</button>
+                                                        <?php else: ?>
+                                                        <button class="btn btn-disabled btn-danger">Cancel</button>
+                                                        <?php endif; ?>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>

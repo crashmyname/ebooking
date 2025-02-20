@@ -1,6 +1,14 @@
 <?php
 require_once __DIR__ . '/autoload.php';
 require_once __DIR__ . '/vendor/autoload.php';
+
+// Cek jika aplikasi sedang dalam mode maintenance
+if (file_exists(__DIR__ . '/.maintenance')) {
+    http_response_code(503); // Status HTTP untuk Service Unavailable
+    \Support\View::error('errors/503');
+    exit; // Hentikan eksekusi aplikasi
+}
+
 use Support\CORSMiddleware;
 use Support\ExceptionHandler;
 use Support\RouteExceptionHandler;

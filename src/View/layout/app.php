@@ -339,7 +339,7 @@
                 confirmButtonText: 'Ya Logout!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    socket.emit('dashboard');
+                    // socket.emit('dashboard');
                     document.getElementById('formlogout').submit();
                 }
             })

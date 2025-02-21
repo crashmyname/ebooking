@@ -110,7 +110,10 @@
                             <?= csrf() ?>
                             <?= method('PUT') ?>
                             <label>Lapangan</label>
-                            <input type="text" name="lapangan_id" id="ulapangan_id" class="form-control" readonly>
+                            <!-- <input type="text" name="lapangan_id" id="ulapangan_id" class="form-control"> -->
+                            <select name="lapangan_id" id="ulapangan_id" class="form-control">
+
+                            </select>
                             <label>Hari</label>
                             <input type="text" name="day" id="uday" class="form-control">
                             <label>Start Time</label>
@@ -239,10 +242,50 @@
             var end_time = $('#uend_time');
             var session = $('#usession');
             if (selectedData.length > 0) {
-                lapangan_id.val(selectedData[0].lapangan_id);
+                lapangan_id.empty();
+                var lapangan = selectedData[0].lapangan_id;
+                switch(true){
+                    case lapangan == 1:
+                    $('<option>').val(lapangan).text(selectedData[0].jenis).appendTo(lapangan_id);
+                    $('<option>').val(2).text('VOLLEY').appendTo(lapangan_id);
+                    $('<option>').val(3).text('BASKET').appendTo(lapangan_id);
+                    $('<option>').val(4).text('TENIS').appendTo(lapangan_id);
+                    $('<option>').val(5).text('SENAM').appendTo(lapangan_id);
+                    break;
+                    case lapangan == 2:
+                    $('<option>').val(lapangan).text(selectedData[0].jenis).appendTo(lapangan_id);
+                    $('<option>').val(1).text('FUTSAL').appendTo(lapangan_id);
+                    $('<option>').val(3).text('BASKET').appendTo(lapangan_id);
+                    $('<option>').val(4).text('TENIS').appendTo(lapangan_id);
+                    $('<option>').val(5).text('SENAM').appendTo(lapangan_id);
+                    break;
+                    case lapangan == 3:
+                    $('<option>').val(lapangan).text(selectedData[0].jenis).appendTo(lapangan_id);
+                    $('<option>').val(1).text('FUTSAL').appendTo(lapangan_id);
+                    $('<option>').val(2).text('VOLLEY').appendTo(lapangan_id);
+                    $('<option>').val(4).text('TENIS').appendTo(lapangan_id);
+                    $('<option>').val(5).text('SENAM').appendTo(lapangan_id);
+                    break;
+                    case lapangan == 4:
+                    $('<option>').val(lapangan).text(selectedData[0].jenis).appendTo(lapangan_id);
+                    $('<option>').val(1).text('FUTSAL').appendTo(lapangan_id);
+                    $('<option>').val(2).text('VOLLEY').appendTo(lapangan_id);
+                    $('<option>').val(3).text('BASKET').appendTo(lapangan_id);
+                    $('<option>').val(5).text('SENAM').appendTo(lapangan_id);
+                    break;
+                    case lapangan == 5:
+                    $('<option>').val(lapangan).text(selectedData[0].jenis).appendTo(lapangan_id);
+                    $('<option>').val(1).text('FUTSAL').appendTo(lapangan_id);
+                    $('<option>').val(2).text('VOLLEY').appendTo(lapangan_id);
+                    $('<option>').val(3).text('BASKET').appendTo(lapangan_id);
+                    $('<option>').val(4).text('TENIS').appendTo(lapangan_id);
+                    break;
+                }
+                lapangan_id.val(lapangan);
                 day.val(selectedData[0].day);
                 start_time.val(selectedData[0].start_time);
                 end_time.val(selectedData[0].end_time);
+                session.val(selectedData[0].session);
                 $('#exampleModalEdit').modal('show');
             } else {
                 $('#exampleModalEdit').modal('hide');
@@ -271,7 +314,7 @@
             }
             var row = selectedData[0];
             var uID = row.schedule_id;
-            var updateSchedule = "<?= base_url() . '/uschedule/' ?>" + uID;
+            var updateSchedule = "<?= base_url() . '/schedule/' ?>" + uID;
             var formID = '#formupdateschedule';
             $('#modalwarning').modal('hide');
             if (selectedData.length > 0) {

@@ -9,6 +9,7 @@ use App\Models\User;
 use Support\BaseController;
 use Support\Date;
 use Support\Request;
+use Support\Response;
 use Support\Validator;
 use Support\View;
 use Support\CSRFToken;
@@ -70,5 +71,16 @@ class HomeController extends BaseController
             ->whereDate('booking.booking_date',$format)
             ->get();
         return view('monitor',['booking'=>$booking]);
+    }
+
+    public function countData()
+    {
+        $date = Date::Now();
+        $format = Date::parse($date)->format('Y-m-d');
+        $user = User::query()->count();
+        $sport = Lapangan::query()->count();
+        $bookingtoday = Booking::query()->whereDate('booking_date',$format)->count();
+        $onlineuser = User::query()->where('flag','=',1)->count();
+        return Response::json(['user'=>$user,'sport'=>$sport,'booking'=>$bookingtoday,'online'=>$onlineuser]);
     }
 }

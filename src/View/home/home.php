@@ -103,4 +103,32 @@
             }
         });
     }
+    document.addEventListener('DOMContentLoaded', function(){
+        function countData(){
+            fetch('<?= base_url().'/countdata'?>')
+                .then(response => response.json())
+                .then(data =>{
+                    if(document.getElementById('user')){
+                        document.getElementById('user').innerHTML = data.user;
+                    }
+                    if(document.getElementById('sport')){
+                        document.getElementById('sport').innerHTML = data.sport;
+                    }
+                    if(document.getElementById('booking')){
+                        document.getElementById('booking').innerHTML = data.booking;
+                    }
+                    if(document.getElementById('online')){
+                        document.getElementById('online').innerHTML = data.online;
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+        var socket = io('http://10.203.84.25:3001');
+        countData();
+        socket.on('reload-data', function(){
+            countData();
+            console.log('Count berhasil direload');
+        })
+        socket.emit('dashboard');
+    })
 </script>

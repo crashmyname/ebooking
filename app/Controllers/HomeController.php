@@ -51,9 +51,11 @@ class HomeController extends BaseController
     {
         $title = 'Dashboard';
         $hari = $this->Day($request);
+        $date = Date::Now();
+        $format = Date::parse($date)->format('Y-m-d');
         $user = User::query()->count();
         $sport = Lapangan::query()->count();
-        $bookingtoday = Booking::query()->where('booking_date','=',Date::Now())->count();
+        $bookingtoday = Booking::query()->whereDate('booking_date',$format)->count();
         $onlineuser = User::query()->where('flag','=',1)->count();
         return view('home/home',['title' => $title,'hari'=>$hari,'user'=>$user,'sport'=>$sport,'booking'=>$bookingtoday,'online'=>$onlineuser],'layout/app');
     }
@@ -67,7 +69,6 @@ class HomeController extends BaseController
             ->leftJoin('users','booking.users_id','=','users.users_id')
             ->whereDate('booking.booking_date',$format)
             ->get();
-            // vd($booking);
         return view('monitor',['booking'=>$booking]);
     }
 }

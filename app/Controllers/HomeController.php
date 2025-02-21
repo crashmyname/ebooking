@@ -81,6 +81,22 @@ class HomeController extends BaseController
         $sport = Lapangan::query()->count();
         $bookingtoday = Booking::query()->whereDate('booking_date',$format)->count();
         $onlineuser = User::query()->where('flag','=',1)->count();
+        $this->sendSocket('dashboard');
         return Response::json(['user'=>$user,'sport'=>$sport,'booking'=>$bookingtoday,'online'=>$onlineuser]);
+    }
+
+    private function sendSocket($event)
+    {
+        $url = 'http://10.203.84.25:3001/' . $event;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
     }
 }

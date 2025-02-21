@@ -38,8 +38,8 @@
                         <div class="card-header">
                             <h4>Total Users</h4>
                         </div>
-                        <div class="card-body">
-                            <?= $user?>
+                        <div class="card-body" id="user">
+                            
                         </div>
                     </div>
                 </div>
@@ -53,8 +53,8 @@
                         <div class="card-header">
                             <h4>Sports</h4>
                         </div>
-                        <div class="card-body">
-                            <?= $sport?>
+                        <div class="card-body" id="sport">
+                            
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                         <div class="card-header">
                             <h4>Booking Today</h4>
                         </div>
-                        <div class="card-body">
-                            <?= $booking?>
+                        <div class="card-body" id="booking">
+                            
                         </div>
                     </div>
                 </div>
@@ -83,8 +83,8 @@
                         <div class="card-header">
                             <h4>Online Users</h4>
                         </div>
-                        <div class="card-body">
-                            <?= $online?>
+                        <div class="card-body" id="online">
+                            
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,8 @@
             }
         });
     }
-    document.addEventListener('DOMContentLoaded', function(){
+    function refreshData(){
+
         function countData(){
             fetch('<?= base_url().'/countdata'?>')
                 .then(response => response.json())
@@ -127,8 +128,10 @@
         countData();
         socket.on('reload-data', function(){
             countData();
-            console.log('Count berhasil direload');
         })
         socket.emit('dashboard');
+    }
+    $(document).ready(function(){
+        refreshData();
     })
 </script>

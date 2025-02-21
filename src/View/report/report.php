@@ -133,8 +133,15 @@
         }
     }
 
+    var socket = io('http://10.203.84.25:3001');
+
     function fetchBookings(month, year) {
-        document.getElementById("loadingIndicator").style.display = "block";
+        let loadingIndicator = document.getElementById("loadingIndicator");
+            if (!loadingIndicator) {
+                return;
+            }
+
+            loadingIndicator.style.display = "block";
         $.ajax({
             url: "<?= base_url() ?>/testbooking",
             method: "GET",
@@ -142,7 +149,6 @@
             dataType: "json",
             success: function(response) {
                 if (response.status === 200) {
-                    // console.log(response.data);
                     bookings[`${year}-${month}`] = {}; // Reset data untuk bulan tertentu
 
                     response.data.forEach(booking => {
@@ -160,7 +166,6 @@
                             status: booking.status,
                         });
                     });
-
                     generateCalendar(month, year);
                 }
             },
@@ -173,7 +178,7 @@
             }
         });
     }
-
+    
     function generateCalendar(month, year) {
         const calendarBody = document.getElementById("calendarBody");
         const currentMonthText = document.getElementById("currentMonth");
@@ -309,8 +314,6 @@
         $("#bookingModal").modal("show");
     }
 
-
-
     $("#bookingForm").submit(function(event) {
         event.preventDefault();
 
@@ -327,6 +330,11 @@
         $("#bookingModal").modal("hide");
         generateCalendar(currentMonth, currentYear);
     });
+
+    socket.on('reload-data', function(){
+        fetchBookings(currentMonth, currentYear);
+    })
+    socket.emit('dashboard');
 
     $(document).ready(function() {
         fetchBookings(currentMonth, currentYear);

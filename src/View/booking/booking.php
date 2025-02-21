@@ -249,10 +249,15 @@
 
     function crudBooking() {
         var table = $('#datatable').DataTable();
+        var socket = io('http://10.203.84.25:3001');
+            socket.on('reload-datatable', function() {
+                table.ajax.reload(null, false);
+            })
         $('#addbooking').on('click', function(e) {
             e.preventDefault();
             var url = '<?= base_url() . '/booking' ?>';
             var formData = new FormData($('#formaddbooking')[0]);
+            
             Swal.fire({
                     title: 'Submit',
                     icon: 'warning',
@@ -288,6 +293,8 @@
                                             text: response.message,
                                         });
                                         table.ajax.reload(null, false);
+                                        socket.emit('dashboard');
+                                        socket.emit('new-user'); 
                                         break;
                                     case response.status === 400:
                                         Swal.fire({
@@ -480,6 +487,8 @@
                                             timer: 1500,
                                             timerProgressBar: true,
                                         });
+                                        socket.emit('dashboard');
+                                        socket.emit('new-user'); 
                                         table.ajax.reload(null, false);
                                     } else if(response.status == 400){
                                         Swal.fire({

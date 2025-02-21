@@ -221,6 +221,7 @@
         </div>
     </div>
     <script>
+        var socket = io('http://10.203.84.25:3001');
         $(document).ready(function() {
             function showLoadingBar() {
                 $('#loading-bar').css('width', '0').show().animate({ width: '100%' }, 800);
@@ -338,6 +339,7 @@
                 confirmButtonText: 'Ya Logout!',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    socket.emit('dashboard');
                     document.getElementById('formlogout').submit();
                 }
             })

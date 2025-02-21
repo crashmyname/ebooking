@@ -137,6 +137,7 @@ class BookingController extends BaseController
                 if($booking){
                     $generate = new BookingController();
                     $generate->generate($booking->code_booking);
+                    $this->sendSocket('new-user');
                     return Response::json(['status'=>201,'message'=>'Booking berhasil']);
                 }
             } catch (\Exception $e) {
@@ -171,6 +172,7 @@ class BookingController extends BaseController
         }
         $booking->delete();
         if($booking){
+            $this->sendSocket('new-user');
             return Response::json(['status'=>200,'message'=>'Lapangan berhasil dihapus']);
         }
     }
@@ -182,7 +184,7 @@ class BookingController extends BaseController
         ->leftJoin('status','status.status_id','=','booking.status_id')
         ->leftJoin('users','users.users_id','=','booking.users_id')
         ->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
-        // vd($booking);
+        $this->sendSocket('dashboard');
         return Response::json(['status'=>200,'data'=>$booking]);
     }
 
@@ -321,5 +323,21 @@ class BookingController extends BaseController
         } else {
             return $_SERVER['REMOTE_ADDR'];
         }
+    }
+
+    private function sendSocket($event)
+    {
+        $url = 'http://10.203.84.25:3001/' . $event;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
     }
 }

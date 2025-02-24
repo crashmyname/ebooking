@@ -301,6 +301,7 @@ class BookingController extends BaseController
     {
         $booking = Booking::query()->where('code_booking','=',$id)->first();
         $booking->status_id = 3;
+        $booking->updated_at = Date::Now();
         $booking->save();
         return Response::json(['status'=>200,'message'=>'Booking berhasil divalidasi']);
     }

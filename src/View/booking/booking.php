@@ -8,17 +8,17 @@
     </div>
     <div class="card-body">
         <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add <i class="fas fa-futbol"></i></button>
-        <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i class="fas fa-trash"></i></button> 
-        <!-- <?php if(\Support\Session::user()->role_id == 1): ?>
+        <?php if(\Support\Session::user()->role_id == 1): ?>
         <button class="btn btn-warning" data-toggle="modal" data-target="" id="modalupdatebooking">Update <i
                 class="fas fa-user-edit"></i></button>
-        <button class="btn btn-outline-success" data-toggle="modal"
+        <!-- <button class="btn btn-outline-success" data-toggle="modal"
             data-target="#exampleModalImport">Import Excel <i class="far fa-file-excel"></i></button> <button
             class="btn btn-success" type="submit" id="exportexcel">Export Excel <i
                 class="fas fa-file-excel"></i></button> <button class="btn btn-dark" id="print">Print <i
                 class="fas fa-print"></i></button> <button class="btn btn-outline-danger" id="exportpdf">Export PDF <i
-                class="far fa-file-pdf"></i></button>
-        <?php endif; ?> -->
+                class="far fa-file-pdf"></i></button> -->
+        <?php endif; ?>
+        <button class="btn btn-danger" type="submit" id="deletebooking">Delete <i class="fas fa-trash"></i></button> 
         <hr>
         <div class="col-3">
             <input type="date" name="tanggal" id="tanggal" class="form-control">
@@ -123,19 +123,23 @@
                             <?= csrf() ?>
                             <?= method('PUT') ?>
                             <label>Username</label>
-                            <input type="text" name="username" id="uusername" class="form-control" readonly>
-                            <label>Name</label>
-                            <input type="text" name="name" id="uname" class="form-control">
-                            <label>Departement</label>
-                            <input type="text" name="departement" id="udepartement" class="form-control">
-                            <label>Email</label>
-                            <input type="email" name="email" id="uemail" class="form-control">
-                            <label>Password</label>
-                            <input type="text" name="password" id="upassword" class="form-control">
-                            <label>Level</label>
-                            <input type="text" name="level" id="ulevel" class="form-control">
-                            <label>Role</label>
-                            <input type="text" name="role_id" id="urole_id" class="form-control">
+                            <input type="text" name="users_id" id="uusers_id" class="form-control" readonly>
+                            <label for="">Booking Date</label>
+                            <input type="date" name="booking_date" id="ubooking_date" class="form-control" readonly>
+                            <label>Lapangan</label>
+                            <select name="lapangan_id" id="ulapangan_id" class="form-control">
+
+                            </select>
+                            <label>Schedule</label>
+                            <select name="schedule_id" id="uschedule_id" class="form-control">
+
+                            </select>
+                            <label>Section</label>
+                            <input type="text" name="description" id="udescription" class="form-control"  readonly>
+                            <label for=""> Status </label>
+                            <select name="status" id="status" class="form-control">
+
+                            </select>
                         </div>
                         <div class="row-body">
                             <!-- <button type="submit" class="btn btn-primary">Save</button> -->
@@ -144,7 +148,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-warning" id="updateuser">Save changes</button>
+                    <button type="submit" class="btn btn-warning" id="updatebooking">Save changes</button>
                 </div>
             </div>
         </form>
@@ -209,6 +213,8 @@
                     render:function(data,type,row){
                         if(data == 'Booked'){
                             return '<span class="badge badge-success">'+data+'</span>';
+                        } else if(data == 'Cancel'){
+                            return '<span class="badge badge-danger">'+data+'</span>';
                         } else {
                             return '<span class="badge badge-primary">'+data+'</span>';
                         }
@@ -223,6 +229,7 @@
                     name: 'action',
                     render:function(data, type, row){
                         var name = row.users_id;
+                        console.log(row.status);
                         switch(true){
                             case <?= \Support\Session::user()->users_id?> != name && <?= \Support\Session::user()->users_id?> != 1:
                                 return '<span class="badge badge-danger">'+'Cek Booking'+'</span>';
@@ -230,6 +237,9 @@
                             case <?= \Support\Session::user()->users_id?> == 1:
                                 return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
                                 break;
+                            case row.status == 'Cancel':
+                                return '<span class="badge badge-danger">'+'Canceled Booking'+'</span>';
+                            break;
                             default:
                                 return '<a href="<?= base_url().'/cardbooking/'?>'+data+'" target="_blank" class="btn btn-warning">Card Booking</a>';
                             break;
@@ -349,26 +359,34 @@
                     }
                 })
         })
-        $('#modalupdateuser').on('click', function(e) {
+        $('#modalupdatebooking').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
             }).data();
-            var username = $('#uusername');
-            var name = $('#uname');
-            var dept = $('#udepartement');
-            var email = $('#uemail');
-            var password = $('#upassword');
-            var level = $('#ulevel');
-            var role_id = $('#urole_id');
+            var username = $('#uusers_id');
+            var bookingDate = $('#ubooking_date');
+            var lapangan = $('#ulapangan_id');
+            var schedule = $('#uschedule_id');
+            var status = $('#status');
+            var description = $('#udescription');
             if (selectedData.length > 0) {
-                username.val(selectedData[0].username);
-                name.val(selectedData[0].name);
-                dept.val(selectedData[0].dept);
-                email.val(selectedData[0].email);
-                password.val(selectedData[0].password);
-                level.val(selectedData[0].level);
-                role_id.val(selectedData[0].role_id);
+                username.val(selectedData[0].name);
+                bookingDate.val(selectedData[0].booking_date);
+                lapangan.empty();
+                lapangan.append('<option value="' + selectedData[0].lapangan_id + '">' + selectedData[0].jenis + '</option>');
+                schedule.empty();
+                schedule.append('<option value="' + selectedData[0].schedule_id + '">' + selectedData[0].day + ' | ' + selectedData[0].start_time + ' | ' + selectedData[0].end_time + ' | Session ' + selectedData[0].session + '</option>');
+                status.empty();
+                var getStatus = selectedData[0].status;
+                if(getStatus == 'Booked'){
+                    status.append('<option value="'+getStatus+'" selected>Booked</option>');
+                    status.append('<option value="5">Canceled</option>');
+                } else {
+                    status.append('<option value="2">Booked</option>');
+                    status.append('<option value="5" selected>Canceled</option>');
+                }
+                description.val(selectedData[0].description);
                 $('#exampleModalEdit').modal('show');
             } else {
                 $('#exampleModalEdit').modal('hide');
@@ -379,7 +397,7 @@
                 });
             }
         });
-        $('#updateuser').on('click', function(e) {
+        $('#updatebooking').on('click', function(e) {
             e.preventDefault();
             var selectedData = table.rows({
                 selected: true
@@ -397,8 +415,8 @@
             }
             var row = selectedData[0];
             var uID = row.uuid;
-            var updateUser = "<?= base_url() . '/uuser/' ?>" + uID;
-            var formID = '#formupdateuser';
+            var updateBooking = "<?= base_url() . '/booking/' ?>" + uID;
+            var formID = '#formupdatebooking';
             $('#modalwarning').modal('hide');
             if (selectedData.length > 0) {
                 Swal.fire({
@@ -409,11 +427,11 @@
                     confirmButtonText: 'Ya, Ubah!!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var formUpUser = new FormData($(formID)[0]);
+                        var formUpBooking = new FormData($(formID)[0]);
                         $.ajax({
                             type: 'POST',
-                            url: updateUser,
-                            data: formUpUser,
+                            url: updateBooking,
+                            data: formUpBooking,
                             contentType: false,
                             processData: false,
                             dataType: 'json',

@@ -37,8 +37,18 @@
     .date-number {
         font-weight: bold;
         position: absolute;
-        top: 5px;
-        left: 5px;
+        top: 1px;
+        left: 1px;
+        background-color: black; /* Warna latar belakang hitam */
+        color: white; /* Warna font putih */
+        border-radius: 10%; /* Membuat elemen menjadi bulat */
+        width: 18px; /* Ukuran lingkaran */
+        height: 18px; /* Ukuran lingkaran */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 12px;
     }
 
     .calendar-table th {

@@ -105,7 +105,7 @@
                         <div class="alert alert-danger alert-has-icon" style="display:none" id="alert">
                             <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
                                 <div class="alert-body">
-                                    <div class="alert-title">Bookingan Sudah Divalidasi!</div>
+                                    <div class="alert-title" id="alerttitle">Bookingan Sudah Divalidasi!</div>
                                     <div class="alert-text" id="alerttext"></div>
                                 </div>
                         </div>
@@ -163,7 +163,12 @@
                                     $('#confirm').attr('href', '<?= base_url().'/validasi/' ?>' + response.data.code_booking);
                                     $('#alert').hide();
                                     $('#alerttext').html('');
-                                }else{
+                                } else if(response.data.status == 'Cancel'){
+                                    $('#confirm').hide();
+                                    $('#alert').show();
+                                    $('#alerttitle').html('Bookingan Sudah Dibatalkan!');
+                                    $('#alerttext').html('');
+                                } else {
                                     $('#confirm').hide();
                                     $('#alert').show();
                                     $('#alerttext').html('Validasi Tanggal : ' + moment(response.data.updated_at).format('DD-MM-YYYY HH:mm:ss'));

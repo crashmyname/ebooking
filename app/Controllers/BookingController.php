@@ -48,26 +48,17 @@ class BookingController extends BaseController
         $schedule = Schedule::query()->where('lapangan_id','=',$request->lapangan_id)->where('day','=',$getday)->get();
         $ceksch = DB::query('
                         SELECT schedule.schedule_id, schedule.day, schedule.start_time, schedule.end_time, 
-                            booking.booking_id, schedule.lapangan_id, booking.booking_date, schedule.session,
+                            booking.booking_id, schedule.lapangan_id,schedule.session,MAX(booking.booking_id) AS booking_id, 
+                            MAX(booking.booking_date) AS booking_date,
                             CASE 
-                                WHEN booking.schedule_id IS NOT NULL THEN TRUE 
+                                WHEN MAX(booking.schedule_id) IS NOT NULL 
+                                AND MAX(CASE WHEN booking.status_id = 5 THEN 0 ELSE 1 END) = 1 THEN TRUE 
                                 ELSE FALSE 
                             END AS is_booked
                         FROM schedule
                         LEFT JOIN booking ON schedule.schedule_id = booking.schedule_id AND booking.booking_date = :booking_date
                         WHERE schedule.lapangan_id = :lapangan_id AND schedule.day = :day
-
-                        UNION
-
-                        SELECT schedule.schedule_id, schedule.day, schedule.start_time, schedule.end_time, 
-                            booking.booking_id, schedule.lapangan_id, booking.booking_date, schedule.session,
-                            CASE 
-                                WHEN booking.schedule_id IS NOT NULL THEN TRUE 
-                                ELSE FALSE 
-                            END AS is_booked
-                        FROM schedule
-                        RIGHT JOIN booking ON schedule.schedule_id = booking.schedule_id AND booking.booking_date = :booking_date
-                        WHERE schedule.lapangan_id = :lapangan_id AND schedule.day = :day
+                        GROUP BY schedule.schedule_id, schedule.day, schedule.start_time, schedule.end_time, schedule.session, schedule.lapangan_id
                     ', [
                         'lapangan_id' => $request->lapangan_id,
                         'day' => $getday,
@@ -93,7 +84,7 @@ class BookingController extends BaseController
     public function create(Request $request)
     {
         $cekbooking = Booking::query()->where('lapangan_id','=',$request->lapangan_id)->where('schedule_id','=',$request->schedule_id)->where('booking_date','=',$request->booking_date)->first();
-        if($cekbooking){
+        if($cekbooking && $cekbooking->status_id != 5){
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
@@ -105,6 +96,7 @@ class BookingController extends BaseController
         ->where('lapangan_id', '=', $request->lapangan_id)
         ->where('booking_date', '=', $request->booking_date)
         ->where('users_id', '=', Session::user()->users_id)
+        ->where('status_id', '!=', 5)
         ->first();
 
         $validasi = Validator::make(['code_booking' => UUID::Uniqe()],
@@ -151,9 +143,14 @@ class BookingController extends BaseController
 
     public function update(Request $request,$id)
     {
-        $booking = Booking::query()->where('lapangan_id',$id)->first();
-        $booking->nama_lapangan = $request->nama_lapangan;
-        $booking->harga = $request->harga;
+        $booking = Booking::query()
+                        ->where('uuid','=',$id)
+                        ->first();
+        // $booking->lapangan_id = $request->lapangan_id;
+        $booking->booking_date = $request->booking_date;
+        // $booking->schedule_id = $request->schedule_id;
+        $booking->description = $request->description;
+        $booking->status_id = $request->status;
         $booking->updated_at = Date::Now();
         $booking->save();
         if($booking){
@@ -183,7 +180,11 @@ class BookingController extends BaseController
         $booking = Booking::query()->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
         ->leftJoin('status','status.status_id','=','booking.status_id')
         ->leftJoin('users','users.users_id','=','booking.users_id')
-        ->whereMonth('booking_date',$request->month)->whereYear('booking_date',$request->year)->get();
+        ->whereMonth('booking_date',$request->month)
+        ->whereYear('booking_date',$request->year)
+        ->where('booking.status_id','!=',5)
+        ->orderBy('schedule.session','ASC')
+        ->get();
         $this->sendSocket('dashboard');
         return Response::json(['status'=>200,'data'=>$booking]);
     }

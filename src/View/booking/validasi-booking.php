@@ -75,17 +75,22 @@
                                     readonly>
                             </div>
                             <div class="form-group col-md-6 col-12">
+                                <label>Tanggal Booking</label>
+                                <input type="text" class="form-control" name="booking_date" id="booking_date"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6 col-12">
                                 <label>Session</label>
                                 <input type="text" class="form-control" name="session"
                                 id="session" readonly>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="form-group col-md-6 col-12">
                                 <label>Start Date</label>
                                 <input type="text" class="form-control" name="start_date"
                                 id="start_date" readonly>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6 col-12">
                                 <label>End Date</label>
                                 <input type="text" class="form-control" name="end_date"
@@ -96,6 +101,13 @@
                             <div class="form-group col-md-6 col-12">
                                 <a href="" id="confirm" class="btn btn-primary" style="display:none">Confirm</a>
                             </div>
+                        </div>
+                        <div class="alert alert-danger alert-has-icon" style="display:none" id="alert">
+                            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                                <div class="alert-body">
+                                    <div class="alert-title">Bookingan Sudah Divalidasi!</div>
+                                    <div class="alert-text" id="alerttext"></div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -139,6 +151,7 @@
                                 $('#alias_sect').val(response.data.singkatan);
                                 $('#jenis').val(response.data.jenis);
                                 $('#session').val(response.data.session);
+                                $('#booking_date').val(moment(response.data.booking_date).format('DD-MM-YYYY'));
                                 $('#start_date').val(response.data.start_time);
                                 $('#end_date').val(response.data.end_time);
                                 $('#code_bookings').html(response.data.code_booking);
@@ -148,8 +161,12 @@
                                 if(response.data.status == 'Booked'){
                                     $('#confirm').show();
                                     $('#confirm').attr('href', '<?= base_url().'/validasi/' ?>' + response.data.code_booking);
+                                    $('#alert').hide();
+                                    $('#alerttext').html('');
                                 }else{
                                     $('#confirm').hide();
+                                    $('#alert').show();
+                                    $('#alerttext').html('Validasi Tanggal : ' + moment(response.data.updated_at).format('DD-MM-YYYY HH:mm:ss'));
                                 }
                             }else{
                                 Swal.fire({

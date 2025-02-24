@@ -283,12 +283,13 @@ class BookingController extends BaseController
 
     public function checkBooking(Request $request)
     {
-        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time','status.status')
+        $booking = Booking::query()->select('booking.code_booking','users.username','users.name','users.section','users.singkatan','lapangan.jenis','schedule.session','schedule.start_time','schedule.end_time','status.status','booking.status_id','booking.updated_at','booking.booking_date')
         ->leftJoin('users','users.users_id','=','booking.users_id')
         ->leftJoin('lapangan','lapangan.lapangan_id','=','booking.lapangan_id')
         ->leftJoin('schedule','schedule.schedule_id','=','booking.schedule_id')
         ->leftJoin('status','status.status_id','=','booking.status_id')
-        ->where('booking.code_booking','=',$request->code_booking)->first();
+        ->where('booking.code_booking','=',$request->code_booking)
+        ->first();
         if($booking){
             return Response::json(['status'=>200,'data'=>$booking->toArray(),'message'=>'Data ditemukan']);
         } else {

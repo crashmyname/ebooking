@@ -229,7 +229,6 @@
                     name: 'action',
                     render:function(data, type, row){
                         var name = row.users_id;
-                        console.log(row.status);
                         switch(true){
                             case <?= \Support\Session::user()->users_id?> != name && <?= \Support\Session::user()->users_id?> != 1:
                                 return '<span class="badge badge-danger">'+'Cek Booking'+'</span>';

@@ -47,18 +47,34 @@ class BookingController extends BaseController
         $getday = Date::DayName($request->booking_date);
         $schedule = Schedule::query()->where('lapangan_id','=',$request->lapangan_id)->where('day','=',$getday)->get();
         $ceksch = DB::query('
-                        SELECT schedule.schedule_id, schedule.day, schedule.start_time, schedule.end_time, 
-                            booking.booking_id, schedule.lapangan_id,schedule.session,MAX(booking.booking_id) AS booking_id, 
+                        SELECT 
+                            schedule.schedule_id, 
+                            schedule.day, 
+                            schedule.start_time, 
+                            schedule.end_time, 
+                            schedule.lapangan_id, 
+                            schedule.session, 
+                            MAX(booking.booking_id) AS booking_id, 
                             MAX(booking.booking_date) AS booking_date,
                             CASE 
                                 WHEN MAX(booking.schedule_id) IS NOT NULL 
-                                AND MAX(CASE WHEN booking.status_id = 5 THEN 0 ELSE 1 END) = 1 THEN TRUE 
+                                AND MAX(CASE WHEN booking.status_id = 5 THEN 0 ELSE 1 END) = 1 
+                                THEN TRUE 
                                 ELSE FALSE 
                             END AS is_booked
                         FROM schedule
-                        LEFT JOIN booking ON schedule.schedule_id = booking.schedule_id AND booking.booking_date = :booking_date
-                        WHERE schedule.lapangan_id = :lapangan_id AND schedule.day = :day
-                        GROUP BY schedule.schedule_id, schedule.day, schedule.start_time, schedule.end_time, schedule.session, schedule.lapangan_id
+                        LEFT JOIN booking 
+                            ON schedule.schedule_id = booking.schedule_id 
+                            AND booking.booking_date = :booking_date
+                        WHERE schedule.lapangan_id = :lapangan_id 
+                        AND schedule.day = :day
+                        GROUP BY 
+                            schedule.schedule_id, 
+                            schedule.day, 
+                            schedule.start_time, 
+                            schedule.end_time, 
+                            schedule.session, 
+                            schedule.lapangan_id
                     ', [
                         'lapangan_id' => $request->lapangan_id,
                         'day' => $getday,

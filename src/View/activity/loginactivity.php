@@ -118,6 +118,18 @@
         $('#start_date,#end_date').change(function() {
             table.ajax.reload();
         });
+        flatpickr('#start_date',{
+            dateFormat: 'Y-m-d',
+            locale: 'id',
+            allowInput: true,
+            defaultDate: new Date(),
+        })
+        flatpickr('#end_date',{
+            dateFormat: 'Y-m-d',
+            locale: 'id',
+            allowInput: true,
+            defaultDate: new Date(),
+        })
     }
 
     // Panggil initDataTable saat halaman Products dimuat

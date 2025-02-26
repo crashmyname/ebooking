@@ -77,7 +77,8 @@
                             <input type="text" name="users_id" id="users_id"
                                 value="<?= \Support\Session::user()->name ?>" class="form-control" readonly>
                             <label for="">Booking Date</label>
-                            <input type="date" name="booking_date" id="booking_date" class="form-control">
+                            <input type="date" id="booking_date" class="form-control">
+                            <input type="hidden" id="hidden_date" name="booking_date">
                             <label>Lapangan</label>
                             <select name="lapangan_id" id="lapangan_id" class="form-control">
                                 <!-- <option value="" hidden disabled selected>--Pilih--</option>
@@ -254,6 +255,22 @@
             table.ajax.reload();
         }
     );
+    flatpickr("#booking_date", {
+        dateFormat: "d F Y",
+        locale: "id", 
+        allowInput: true,
+        defaultDate: new Date(),
+        onChange:function(selectedDates, dateStr, instance){
+            var formatedDate = instance.formatDate(selectedDates[0],'Y-m-d');
+            document.getElementById('hidden_date').value =formatedDate;
+        }
+    });
+    flatpickr("#tanggal", {
+        dateFormat: "Y-m-d",
+        locale: "id", 
+        allowInput: true,
+        defaultDate: new Date()
+    });
     }
 
     function crudBooking() {
@@ -538,9 +555,9 @@
 
     function getSchedule() {
         setTimeout(function() {
-            $('#booking_date').trigger('change');
+            $('#hidden_date').trigger('change');
         }, 100);
-        $('#booking_date').change(function(){
+        $('#hidden_date').change(function(){
             var bookingdate = $(this).val();
             var url = '<?= base_url() . '/getday' ?>';
             $.ajax({
@@ -563,9 +580,9 @@
                 }
             })
         })
-        $('#lapangan_id,#booking_date').change(function() {
+        $('#lapangan_id,#hidden_date').change(function() {
             var lapangan_id = $('#lapangan_id').val();
-            var bookingdate = $('#booking_date').val();
+            var bookingdate = $('#hidden_date').val();
             var url = '<?= base_url() . '/getscheduledata' ?>';
             $.ajax({
                 type: 'POST',
@@ -604,18 +621,25 @@
         let maxDate = new Date();
         maxDate.setDate(today.getDate() + 30);
 
-        function formatDate(date) {
-            return date.toISOString().split('T')[0];
-        }
-
-        document.getElementById("booking_date").min = formatDate(minDate);
-        document.getElementById("booking_date").max = formatDate(maxDate);
+        flatpickr("#booking_date", {
+            dateFormat: "d F Y",
+            locale: "id",
+            allowInput: true,
+            minDate: minDate,
+            maxDate: maxDate,
+            defaultDate: today,
+            onChange: function(selectedDates, dateStr, instance) {
+                let formattedDate = instance.formatDate(selectedDates[0], "Y-m-d");
+                document.getElementById("hidden_date").value = formattedDate;
+                $('#hidden_date').trigger('change');
+            }
+        });
     }
 
     function getData() {
         // Pastikan kode hanya berjalan setelah DOM dimuat
         let tanggalInput = document.getElementById('tanggal');
-        let bookingDate = document.getElementById('booking_date');
+        let bookingDate = document.getElementById('hidden_date');
 
         if (tanggalInput && bookingDate) {
             // Ambil tanggal hari ini dan format ke 'YYYY-MM-DD'

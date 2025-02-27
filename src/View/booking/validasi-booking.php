@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Tanggal Booking</label>
-                                <input type="text" class="form-control" name="booking_date" id="booking_date"
+                                <input type="text" class="form-control" name="booking_date" id="tgl_booking"
                                     readonly>
                             </div>
                             <div class="form-group col-md-6 col-12">
@@ -85,16 +85,16 @@
                                 id="session" readonly>
                             </div>
                             <div class="form-group col-md-6 col-12">
-                                <label>Start Date</label>
+                                <label>Start Time</label>
                                 <input type="text" class="form-control" name="start_date"
-                                id="start_date" readonly>
+                                id="start_time" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-12">
-                                <label>End Date</label>
+                                <label>End Time</label>
                                 <input type="text" class="form-control" name="end_date"
-                                id="end_date" readonly>
+                                id="end_time" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -107,6 +107,12 @@
                                 <div class="alert-body">
                                     <div class="alert-title" id="alerttitle">Bookingan Sudah Divalidasi!</div>
                                     <div class="alert-text" id="alerttext"></div>
+                                </div>
+                        </div>
+                        <div class="alert alert-success alert-has-icon" style="display:none" id="alertsuccess">
+                            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                                <div class="alert-body">
+                                    <div class="alert-text" id="successtext"></div>
                                 </div>
                         </div>
                     </div>
@@ -151,9 +157,9 @@
                                 $('#alias_sect').val(response.data.singkatan);
                                 $('#jenis').val(response.data.jenis);
                                 $('#session').val(response.data.session);
-                                $('#booking_date').val(moment(response.data.booking_date).format('DD-MM-YYYY'));
-                                $('#start_date').val(response.data.start_time);
-                                $('#end_date').val(response.data.end_time);
+                                $('#tgl_booking').val(moment(response.data.booking_date).format('DD-MM-YYYY'));
+                                $('#start_time').val(response.data.start_time);
+                                $('#end_time').val(response.data.end_time);
                                 $('#code_bookings').html(response.data.code_booking);
                                 $('#booking-link').attr('href', '<?= asset('cardbooking/') ?>' + response.data.code_booking + '.png');
                                 $('#booking-link img').attr('src', '<?= asset('cardbooking/') ?>' + response.data.code_booking + '.png');
@@ -171,6 +177,7 @@
                                 } else {
                                     $('#confirm').hide();
                                     $('#alert').show();
+                                    $('#alerttitle').show();
                                     $('#alerttext').html('Validasi Tanggal : ' + moment(response.data.updated_at).format('DD-MM-YYYY HH:mm:ss'));
                                 }
                             }else{
@@ -208,6 +215,9 @@
                                     icon: 'success',
                                     text: response.message,
                                 });
+                                $('#confirm').hide();
+                                $('#alertsuccess').show();
+                                $('#successtext').html('Bookingan berhasil divalidasi');
                             }else{
                                 Swal.fire({
                                     title: 'Failed',

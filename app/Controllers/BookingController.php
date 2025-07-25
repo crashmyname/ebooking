@@ -122,7 +122,7 @@ class BookingController extends BaseController
             return Response::json(['status'=>500,'message'=>$validasi]);
         }
 
-        if ($cekUserBooking) {
+        if ($cekUserBooking && $cekUserBooking->users_id != 1) {
             return Response::json(['status' => 500, 'message' => 'Anda sudah melakukan booking lapangan yang sama di sesi lain']);
         }
         $bookingdate = $request->booking_date;

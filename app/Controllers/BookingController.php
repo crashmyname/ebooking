@@ -99,7 +99,9 @@ class BookingController extends BaseController
 
     public function create(Request $request)
     {
-        $cekbooking = Booking::query()->where('lapangan_id','=',$request->lapangan_id)->where('schedule_id','=',$request->schedule_id)->where('booking_date','=',$request->booking_date)->first();
+        $cekbooking = Booking::query()->where('lapangan_id','=',$request->lapangan_id)
+        ->where('schedule_id','=',$request->schedule_id)
+        ->where('booking_date','=',$request->booking_date)->first();
         if($cekbooking && $cekbooking->status_id != 5){
             return Response::json(['status'=>500,'message'=>'Lapangan sudah di booking']);
         }
@@ -111,7 +113,7 @@ class BookingController extends BaseController
         $cekUserBooking = Booking::query()
         ->where('lapangan_id', '=', $request->lapangan_id)
         ->where('booking_date', '=', $request->booking_date)
-        ->where('users_id', '=', Session::user()->users_id)
+        ->where('description', '=', Session::user()->singkatan)
         ->where('status_id', '!=', 5)
         ->first();
 
